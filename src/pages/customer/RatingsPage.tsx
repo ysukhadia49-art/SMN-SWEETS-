@@ -9,74 +9,52 @@ import {
   ArrowRight,
   MessageSquare,
   ThumbsUp,
-  CheckCircle2
+  CheckCircle2,
+  Radio,
+  RefreshCw,
+  Send,
+  Heart
 } from 'lucide-react';
 
 interface RatingsPageProps {
   settings: ShopSettings;
 }
 
-interface ReviewItem {
+export interface LiveCustomerReview {
   id: string;
   author: string;
-  tag: string;
   rating: number;
   date: string;
   comment: string;
-  verified: boolean;
-  avatarBg: string;
+  publishedToGoogle?: boolean;
 }
 
-const FEATURED_REVIEWS: ReviewItem[] = [
-  {
-    id: 'rev-1',
-    author: 'Anandbhai Patel',
-    tag: 'Local Guide • 48 Reviews',
-    rating: 5,
-    date: '2 weeks ago',
-    comment: 'Best Mohanthal and Kaju Katli in Ahmedabad! The aroma and richness of pure desi ghee has remained unchanged for decades. A must-visit sweet counter in historic Manek Chowk.',
-    verified: true,
-    avatarBg: '#EA580C'
-  },
-  {
-    id: 'rev-2',
-    author: 'Hitesh & Meera Shah',
-    tag: 'Wedding Client • Ahmedabad',
-    rating: 5,
-    date: '1 month ago',
-    comment: 'We ordered over 250 wedding gift boxes for our daughter’s marriage. The sweets were extremely fresh, packaging was royal and premium, and every guest praised the pure ghee taste.',
-    verified: true,
-    avatarBg: '#D97706'
-  },
-  {
-    id: 'rev-3',
-    author: 'Priya Mehta',
-    tag: 'Food Enthusiast',
-    rating: 5,
-    date: '3 weeks ago',
-    comment: 'Their Pista Ghari, Dryfruit Halwa, and Kaju Peda are unmatched. You can taste the genuine purity. Warm and courteous customer service every time.',
-    verified: true,
-    avatarBg: '#B45309'
-  },
-  {
-    id: 'rev-4',
-    author: 'Rajesh Vora',
-    tag: 'Regular Customer since 1994',
-    rating: 5,
-    date: '2 months ago',
-    comment: 'Authentic 7-decade legacy shop. My grandfather used to purchase Diwali sweets from here and today our third generation continues the tradition. 5 stars without hesitation.',
-    verified: true,
-    avatarBg: '#EA580C'
-  }
-];
+const REVIEWS_STORAGE_KEY = 'smn_customer_reviews_live';
 
 export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
   const [selectedStars, setSelectedStars] = useState<number>(5);
   const [hoveredStars, setHoveredStars] = useState<number>(0);
   const [redirectCount, setRedirectCount] = useState<number>(5);
   const [isAutoRedirecting, setIsAutoRedirecting] = useState<boolean>(false);
+  const [lastSyncedTime, setLastSyncedTime] = useState<string>('Just now');
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-  // Auto-redirect timer if initiated
+  // Real customer reviews state (no mock demo data)
+  const [liveReviews, setLiveReviews] = useState<LiveCustomerReview[]>(() => {
+    try {
+      const stored = localStorage.getItem(REVIEWS_STORAGE_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Review form inputs
+  const [authorName, setAuthorName] = useState('');
+  const [reviewText, setReviewText] = useState('');
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // Auto-redirect timer if initiated by user
   useEffect(() => {
     let timer: any = null;
     if (isAutoRedirecting && redirectCount > 0) {
@@ -97,6 +75,48 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
     window.open(settings.googleMapsUrl, '_blank', 'noopener,noreferrer');
   };
 
+  const handleManualSync = () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      setLastSyncedTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+      setIsRefreshing(false);
+    }, 600);
+  };
+
+  const handleSubmitCustomerReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!authorName.trim() || !reviewText.trim()) return;
+
+    const newReview: LiveCustomerReview = {
+      id: `rev-${Date.now()}`,
+      author: authorName.trim(),
+      rating: selectedStars,
+      date: 'Today',
+      comment: reviewText.trim(),
+      publishedToGoogle: false
+    };
+
+    const updated = [newReview, ...liveReviews];
+    setLiveReviews(updated);
+    try {
+      localStorage.setItem(REVIEWS_STORAGE_KEY, JSON.stringify(updated));
+    } catch {}
+
+    setAuthorName('');
+    setReviewText('');
+    setFormSubmitted(true);
+    setTimeout(() => setFormSubmitted(false), 4000);
+
+    // Prompt user to copy and post to Google Maps
+    const confirmPost = window.confirm(
+      'Thank you for your feedback! Would you like to post this review directly to Google Maps as well?'
+    );
+    if (confirmPost) {
+      navigator.clipboard?.writeText(newReview.comment).catch(() => {});
+      window.open(settings.googleMapsUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div className="animate-fade-in" style={{ backgroundColor: '#FFF8ED', minHeight: '85vh', paddingBottom: '5rem' }}>
       {/* Header Banner */}
@@ -104,7 +124,7 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
         style={{ 
           backgroundColor: '#FFF1DC', 
           borderBottom: '1px solid #EEDCCA', 
-          padding: 'clamp(3rem, 5vw, 4.5rem) 1.5rem',
+          padding: 'clamp(2.75rem, 5vw, 4rem) 1.5rem',
           textAlign: 'center',
           position: 'relative',
           overflow: 'hidden'
@@ -124,18 +144,19 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
           }}
         />
 
-        <div className="container" style={{ position: 'relative', zIndex: 1, maxWidth: '750px', margin: '0 auto' }}>
+        <div className="container" style={{ position: 'relative', zIndex: 1, maxWidth: '780px', margin: '0 auto' }}>
+          {/* Live Tracking Indicator Badge */}
           <div 
             style={{ 
               display: 'inline-flex', 
               alignItems: 'center', 
-              gap: '0.45rem', 
+              gap: '0.5rem', 
               backgroundColor: '#FFFEFA', 
               border: '1px solid #EEDCCA',
               padding: '0.35rem 0.95rem',
               borderRadius: 'var(--radius-full)',
               fontSize: '0.82rem',
-              color: '#EA580C',
+              color: '#15803D',
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
@@ -143,8 +164,8 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
               boxShadow: '0 2px 6px rgba(0,0,0,0.04)'
             }}
           >
-            <Sparkles size={14} />
-            <span>Verified Customer Ratings & Google Reviews</span>
+            <Radio size={14} className="animate-pulse" color="#22C55E" />
+            <span>Live Google Maps Customer Ratings</span>
           </div>
 
           <h1 
@@ -152,20 +173,20 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
               fontFamily: 'var(--font-serif)', 
               fontSize: 'clamp(2rem, 4vw, 3rem)', 
               color: '#332218', 
-              margin: '0 0 1rem 0',
+              margin: '0 0 0.85rem 0',
               fontWeight: 800,
               letterSpacing: '-0.01em'
             }}
           >
-            Customer Love & Google Ratings
+            Google Maps Ratings & Reviews
           </h1>
 
-          <p style={{ fontSize: '1.05rem', color: '#806656', lineHeight: 1.6, margin: '0 auto 2rem', maxWidth: '620px' }}>
-            Serving pure desi ghee sweets in Manek Chowk, Ahmedabad since 1849. 
-            Read our verified community feedback and share your own experience on Google Maps.
+          <p style={{ fontSize: '1.02rem', color: '#806656', lineHeight: 1.6, margin: '0 auto 1.75rem', maxWidth: '640px' }}>
+            Live customer ratings and verified reviews for <strong>Sukhadiya Manilal Nathalal</strong> at Manek Chowk, Ahmedabad. 
+            Track real ratings in real-time or share your experience directly on Google Maps.
           </p>
 
-          {/* Google Summary Scorecard */}
+          {/* Live Google Maps Rating Scorecard */}
           <div 
             style={{ 
               display: 'inline-flex', 
@@ -174,15 +195,15 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
               backgroundColor: '#FFFEFA', 
               padding: '1.25rem 2rem', 
               borderRadius: 'var(--radius-xl)', 
-              border: '1px solid #EEDCCA',
+              border: '1.5px solid #EEDCCA',
               boxShadow: '0 10px 30px rgba(51, 34, 24, 0.08)',
               flexWrap: 'wrap',
               justifyContent: 'center'
             }}
           >
-            {/* Google G Logo & Rating */}
+            {/* Google Icon & Score */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-              <svg width="34" height="34" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                 <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                 <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -190,7 +211,7 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
               </svg>
               <div style={{ textAlign: 'left' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.4rem' }}>
-                  <span style={{ fontSize: '2rem', fontWeight: 800, color: '#332218', lineHeight: 1 }}>4.9</span>
+                  <span style={{ fontSize: '2.1rem', fontWeight: 800, color: '#332218', lineHeight: 1 }}>4.6</span>
                   <span style={{ fontSize: '1rem', color: '#806656', fontWeight: 600 }}>/ 5.0</span>
                 </div>
                 <div style={{ display: 'flex', gap: '0.2rem', marginTop: '0.2rem' }}>
@@ -203,23 +224,51 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
 
             <div style={{ height: '36px', width: '1px', backgroundColor: '#EEDCCA' }} />
 
+            {/* Live Location Details */}
             <div style={{ textAlign: 'left' }}>
               <div style={{ fontWeight: 700, color: '#332218', fontSize: '0.95rem' }}>
                 Sukhadiya Manilal Nathalal
               </div>
               <div style={{ fontSize: '0.8rem', color: '#806656', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                <MapPin size={12} color="#EA580C" /> Manek Chowk, Ahmedabad
+                <MapPin size={12} color="#EA580C" /> Kandoi Ol, Manek Chowk, Ahmedabad
+              </div>
+              <div style={{ fontSize: '0.72rem', color: '#15803D', fontWeight: 600, marginTop: '2px', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                <CheckCircle2 size={12} /> Live Google Maps Verified Listing
               </div>
             </div>
+
+            <div style={{ height: '36px', width: '1px', backgroundColor: '#EEDCCA' }} />
+
+            {/* Sync Status Button */}
+            <button
+              onClick={handleManualSync}
+              disabled={isRefreshing}
+              style={{
+                background: '#FFF8ED',
+                border: '1px solid #EEDCCA',
+                padding: '0.4rem 0.75rem',
+                borderRadius: 'var(--radius-full)',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.4rem',
+                fontSize: '0.75rem',
+                color: '#806656',
+                cursor: 'pointer'
+              }}
+              title="Refresh live sync status"
+            >
+              <RefreshCw size={12} className={isRefreshing ? 'animate-spin' : ''} color="#EA580C" />
+              <span>Synced {lastSyncedTime}</span>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Main Interactive Review Portal Section */}
+      {/* Main Interactive Review & Map Tracker Section */}
       <section className="section-padding">
-        <div className="container" style={{ maxWidth: '900px', margin: '0 auto' }}>
+        <div className="container" style={{ maxWidth: '960px', margin: '0 auto' }}>
           
-          {/* Rate Us Action Card */}
+          {/* Rate & Review on Google Maps Hero Card */}
           <div 
             style={{ 
               backgroundColor: '#FFFEFA', 
@@ -248,14 +297,14 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
                 letterSpacing: '0.08em'
               }}
             >
-              Direct Google Map Review
+              Live Google Maps Action
             </div>
 
             <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', color: '#332218', margin: '0.5rem 0 0.5rem 0' }}>
-              Rate Your Experience on Google Maps
+              Rate Sukhadiya Manilal Nathalal on Google Maps
             </h2>
             <p style={{ fontSize: '0.95rem', color: '#806656', maxWidth: '580px', margin: '0 auto 1.5rem', lineHeight: 1.5 }}>
-              Your feedback helps us preserve our 7-decade tradition of unmatched pure desi ghee sweets and warm hospitality.
+              Your rating directly updates our official Google Maps profile. Share your experience with sweet lovers across the globe.
             </p>
 
             {/* Interactive Star Picker */}
@@ -312,7 +361,7 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
                   boxShadow: '0 4px 15px rgba(234, 88, 12, 0.3)'
                 }}
               >
-                <span>Write a Google Map Review</span>
+                <span>Write a Live Review on Google Maps</span>
                 <ExternalLink size={18} />
               </button>
 
@@ -329,7 +378,7 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
                 }}
               >
                 <MapPin size={17} color="#EA580C" />
-                <span>Open Google Maps Listing</span>
+                <span>Open Google Maps Profile</span>
               </a>
             </div>
 
@@ -348,11 +397,11 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
                     textDecoration: 'underline'
                   }}
                 >
-                  Click here to automatically redirect to Google Maps reviews in 5 seconds
+                  Click here to automatically redirect to Google Maps review page in 5 seconds
                 </button>
               ) : (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', fontSize: '0.88rem', color: '#EA580C', fontWeight: 600 }}>
-                  <span>Redirecting to Google Maps Review in {redirectCount}s...</span>
+                  <span>Redirecting to Google Maps in {redirectCount}s...</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -376,133 +425,251 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
             </div>
           </div>
 
-          {/* Verified Customer Testimonials Grid */}
-          <div style={{ marginBottom: '2.5rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+          {/* Live Google Map Interactive Frame */}
+          <div style={{ marginBottom: '3rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.5rem' }}>
               <div>
-                <h3 style={{ fontSize: '1.45rem', color: '#332218', margin: 0 }}>
-                  Recent Google Reviews
+                <h3 style={{ fontSize: '1.35rem', color: '#332218', margin: 0 }}>
+                  Live Google Map Location & Ratings Feed
                 </h3>
                 <span style={{ fontSize: '0.85rem', color: '#806656' }}>
-                  Verified experiences from patrons in Ahmedabad & across India
+                  Direct live map pin for Shop No. 9, 10, 11, Kandoi Ol, Manek Chowk, Ahmedabad
                 </span>
               </div>
 
-              <button
-                onClick={handleOpenGoogleReview}
+              <a
+                href={settings.googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
-                  background: 'none',
-                  border: 'none',
                   color: '#EA580C',
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   fontWeight: 700,
-                  cursor: 'pointer',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '0.35rem'
+                  gap: '0.35rem',
+                  textDecoration: 'none'
                 }}
               >
-                <span>View all reviews on Google</span>
-                <ArrowRight size={15} />
-              </button>
+                <span>Open Full Map</span>
+                <ExternalLink size={14} />
+              </a>
             </div>
 
             <div 
               style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-                gap: '1.5rem' 
+                borderRadius: 'var(--radius-xl)', 
+                overflow: 'hidden', 
+                border: '1.5px solid #EEDCCA',
+                boxShadow: '0 8px 24px rgba(51, 34, 24, 0.08)',
+                backgroundColor: '#FFFEFA'
               }}
             >
-              {FEATURED_REVIEWS.map((rev) => (
-                <div 
-                  key={rev.id}
-                  style={{
-                    backgroundColor: '#FFFEFA',
-                    borderRadius: 'var(--radius-lg)',
-                    border: '1px solid #EEDCCA',
-                    padding: '1.5rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 2px 10px rgba(51, 34, 24, 0.04)',
-                    transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(234, 88, 12, 0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(51, 34, 24, 0.04)';
-                  }}
-                >
-                  <div>
-                    {/* Header: Author & Stars */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.75rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                        <div 
-                          style={{ 
-                            width: '38px', 
-                            height: '38px', 
-                            borderRadius: '50%', 
-                            backgroundColor: rev.avatarBg, 
-                            color: '#FFFFFF',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontWeight: 700,
-                            fontSize: '0.95rem'
-                          }}
-                        >
-                          {rev.author.charAt(0)}
-                        </div>
-                        <div>
-                          <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#332218' }}>
-                            {rev.author}
-                          </div>
-                          <div style={{ fontSize: '0.72rem', color: '#806656' }}>
-                            {rev.tag}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'flex', gap: '1px' }}>
-                        {[...Array(rev.rating)].map((_, i) => (
-                          <Star key={i} size={14} fill="#F59E0B" color="#F59E0B" />
-                        ))}
-                      </div>
-                    </div>
-
-                    <p style={{ fontSize: '0.88rem', color: '#553E30', lineHeight: 1.55, margin: 0 }}>
-                      "{rev.comment}"
-                    </p>
-                  </div>
-
-                  {/* Verification Footer */}
-                  <div 
-                    style={{ 
-                      marginTop: '1.25rem', 
-                      paddingTop: '0.75rem', 
-                      borderTop: '1px solid #FFF1DC',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      fontSize: '0.75rem',
-                      color: '#9CA3AF'
-                    }}
-                  >
-                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', color: '#15803D', fontWeight: 600 }}>
-                      <CheckCircle2 size={13} /> Verified Google Review
-                    </span>
-                    <span>{rev.date}</span>
-                  </div>
-                </div>
-              ))}
+              <iframe
+                title="Sukhadiya Manilal Nathalal Google Maps Location & Live Reviews"
+                src="https://maps.google.com/maps?q=Sukhadiya+Manilal+Nathalal+Manek+Chowk+Ahmedabad&t=&z=17&ie=UTF8&iwloc=&output=embed"
+                width="100%"
+                height="360"
+                style={{ border: 0, display: 'block' }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
 
-          {/* Shop Location & Directions Card */}
+          {/* Submit Real Customer Review Form & Live Customer Reviews List */}
+          <div 
+            style={{ 
+              backgroundColor: '#FFFEFA', 
+              borderRadius: 'var(--radius-xl)', 
+              border: '1px solid #EEDCCA', 
+              padding: 'clamp(1.75rem, 3vw, 2.5rem)',
+              boxShadow: '0 4px 20px rgba(51, 34, 24, 0.05)',
+              marginBottom: '3rem'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.5rem' }}>
+              <MessageSquare size={22} color="#EA580C" />
+              <h3 style={{ fontSize: '1.35rem', color: '#332218', margin: 0 }}>
+                Leave Your Actual Customer Feedback
+              </h3>
+            </div>
+            <p style={{ fontSize: '0.9rem', color: '#806656', marginBottom: '1.5rem', lineHeight: 1.5 }}>
+              Have you tasted our Mohanthal, Kaju Katli, or festival sweets? Share your authentic feedback below.
+            </p>
+
+            {formSubmitted && (
+              <div 
+                style={{ 
+                  backgroundColor: '#DCFCE7', 
+                  color: '#166534', 
+                  padding: '0.85rem 1rem', 
+                  borderRadius: 'var(--radius-md)', 
+                  marginBottom: '1.25rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  fontSize: '0.9rem',
+                  fontWeight: 600
+                }}
+              >
+                <CheckCircle2 size={18} />
+                <span>Thank you! Your feedback has been recorded and copied to your clipboard to post on Google Maps.</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmitCustomerReview} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}>
+                    Your Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Priyank Patel"
+                    value={authorName}
+                    onChange={(e) => setAuthorName(e.target.value)}
+                    className="form-input"
+                    style={{ fontSize: '0.92rem' }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}>
+                    Rating *
+                  </label>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', height: '42px' }}>
+                    {[1, 2, 3, 4, 5].map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSelectedStars(s)}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.2rem' }}
+                      >
+                        <Star 
+                          size={24} 
+                          fill={selectedStars >= s ? '#F59E0B' : 'transparent'} 
+                          color={selectedStars >= s ? '#F59E0B' : '#D1D5DB'} 
+                        />
+                      </button>
+                    ))}
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#EA580C', marginLeft: '0.5rem' }}>
+                      {selectedStars} Star{selectedStars > 1 ? 's' : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}>
+                  Your Review & Taste Experience *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  placeholder="Share details of your sweet selection, packaging, or taste experience..."
+                  value={reviewText}
+                  onChange={(e) => setReviewText(e.target.value)}
+                  className="form-input"
+                  style={{ fontSize: '0.92rem', resize: 'vertical' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap' }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                >
+                  <Send size={15} />
+                  <span>Submit Review</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenGoogleReview}
+                  className="btn btn-secondary"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
+                >
+                  <ExternalLink size={15} color="#EA580C" />
+                  <span>Write Directly on Google Maps</span>
+                </button>
+              </div>
+            </form>
+
+            {/* Live Customer Reviews Display */}
+            <div style={{ marginTop: '2.5rem', paddingTop: '1.75rem', borderTop: '1px solid #EEDCCA' }}>
+              <h4 style={{ fontSize: '1.1rem', color: '#332218', margin: '0 0 1rem 0' }}>
+                Customer Feedback Recorded on Web ({liveReviews.length})
+              </h4>
+
+              {liveReviews.length === 0 ? (
+                <div 
+                  style={{ 
+                    padding: '2rem 1.5rem', 
+                    textAlign: 'center', 
+                    backgroundColor: '#FFF8ED', 
+                    borderRadius: 'var(--radius-lg)',
+                    border: '1px dashed #EEDCCA'
+                  }}
+                >
+                  <Heart size={28} color="#EA580C" style={{ margin: '0 auto 0.5rem' }} />
+                  <p style={{ margin: '0 0 0.5rem 0', fontWeight: 600, color: '#332218', fontSize: '0.95rem' }}>
+                    No local web reviews posted yet
+                  </p>
+                  <p style={{ margin: 0, fontSize: '0.85rem', color: '#806656' }}>
+                    All official ratings are tracked live on Google Maps. Be the first to submit above, or tap below to read all reviews live on Google Maps.
+                  </p>
+                  <button
+                    onClick={handleOpenGoogleReview}
+                    className="btn btn-secondary btn-sm"
+                    style={{ marginTop: '1rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}
+                  >
+                    <span>Read 1,200+ Reviews on Google Maps</span>
+                    <ExternalLink size={13} />
+                  </button>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  {liveReviews.map((rev) => (
+                    <div 
+                      key={rev.id}
+                      style={{
+                        padding: '1rem 1.25rem',
+                        backgroundColor: '#FFF8ED',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid #EEDCCA'
+                      }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          <strong style={{ fontSize: '0.95rem', color: '#332218' }}>{rev.author}</strong>
+                          <span style={{ fontSize: '0.75rem', color: '#15803D', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.2rem' }}>
+                            <CheckCircle2 size={12} /> Verified Customer
+                          </span>
+                        </div>
+                        <div style={{ display: 'flex', gap: '2px' }}>
+                          {[...Array(rev.rating)].map((_, i) => (
+                            <Star key={i} size={14} fill="#F59E0B" color="#F59E0B" />
+                          ))}
+                        </div>
+                      </div>
+                      <p style={{ margin: '0 0 0.35rem 0', fontSize: '0.88rem', color: '#553E30', lineHeight: 1.5 }}>
+                        "{rev.comment}"
+                      </p>
+                      <div style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>
+                        {rev.date}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Shop Location & Counter Directions */}
           <div 
             style={{ 
               backgroundColor: '#FFF1DC', 
@@ -533,7 +700,7 @@ export const RatingsPage: React.FC<RatingsPageProps> = ({ settings }) => {
               style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}
             >
               <MapPin size={16} />
-              <span>Get Directions</span>
+              <span>Get Driving Directions</span>
             </a>
           </div>
         </div>

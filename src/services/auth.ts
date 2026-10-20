@@ -1,32 +1,13 @@
 import { User } from '../types';
 
 const AUTH_STORAGE_KEY = 'smn_auth_user_session';
-const USERS_STORAGE_KEY = 'smn_registered_users_db';
+const USERS_STORAGE_KEY = 'smn_registered_users_v2';
 
 interface StoredUser extends User {
   passwordHash: string;
 }
 
-const DEFAULT_USERS: StoredUser[] = [
-  {
-    id: 'user-cust-1',
-    name: 'Anandbhai Patel',
-    email: 'anand@example.com',
-    phone: '+91 98250 12345',
-    role: 'customer',
-    createdAt: '2026-10-01T08:00:00Z',
-    passwordHash: 'password123'
-  },
-  {
-    id: 'user-admin-1',
-    name: 'Sukhadiyaji (Shop Owner)',
-    email: 'admin@sukhadiyamanilal.com',
-    phone: '+91 98250 00000',
-    role: 'admin',
-    createdAt: '2026-01-01T08:00:00Z',
-    passwordHash: 'admin123'
-  }
-];
+const DEFAULT_USERS: StoredUser[] = [];
 
 class AuthService {
   private currentUser: User | null = null;

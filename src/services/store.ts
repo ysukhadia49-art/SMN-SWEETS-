@@ -15,12 +15,12 @@ import {
 const STORAGE_KEYS = {
   PRODUCTS: 'smn_products_v5',
   CATEGORIES: 'smn_categories_v5',
-  ENQUIRIES: 'smn_bulk_enquiries_v5',
+  ENQUIRIES: 'smn_bulk_enquiries_v6',
   SETTINGS: 'smn_shop_settings_v5',
   LEGACY_CLEANUP_DONE: 'smn_legacy_loyalty_purged'
 };
 
-// Safe purge of old loyalty data if present in local browser storage
+// Safe purge of old loyalty data and demo enquiries if present in local browser storage
 export function purgeLegacyLoyaltyData(): void {
   try {
     if (typeof localStorage === 'undefined') return;
@@ -30,7 +30,8 @@ export function purgeLegacyLoyaltyData(): void {
       'smn_rewards',
       'smn_customer_qr',
       'smn_loyalty_campaigns',
-      'smn_loyalty_transactions'
+      'smn_loyalty_transactions',
+      'smn_bulk_enquiries_v5'
     ];
     keysToPurge.forEach(k => localStorage.removeItem(k));
     localStorage.setItem(STORAGE_KEYS.LEGACY_CLEANUP_DONE, 'true');
@@ -45,81 +46,7 @@ export const INITIAL_PRODUCTS: Product[] = RATE_CARD_PRODUCTS;
 
 export const INITIAL_SETTINGS: ShopSettings = OFFICIAL_SHOP_SETTINGS;
 
-export const INITIAL_BULK_ENQUIRIES: BulkEnquiry[] = [
-  {
-    id: 'enq-101',
-    enquiryReference: 'SMN-BULK-1042',
-    customerName: 'Priteshbhai Shah',
-    contactNumber: '+91 98251 44321',
-    email: 'pritesh.shah@example.com',
-    occasion: 'Wedding',
-    requestedDate: '2026-11-24',
-    requestedProducts: 'Special Kaju Katli (35 kg), Mohanthal (25 kg), Shahi Motichoor Laddoo (20 kg)',
-    approximateQuantity: '80 kg in 500g custom gift boxes',
-    collectionOrDelivery: 'delivery',
-    deliveryAddress: 'Grand Bhagwati, SG Highway, Ahmedabad',
-    notes: 'Kindly prepare gold foil embossed wedding boxes. Need sample box tasting next week.',
-    status: 'Quotation Shared',
-    internalNotes: 'Sample tasting arranged for 25th Oct. Rate per kg agreed with 5% bulk wedding pricing.',
-    assignedStaff: 'Maheshbhai (Store Mgr)',
-    createdAt: '2026-10-18T10:30:00Z',
-    updatedAt: '2026-10-19T14:15:00Z'
-  },
-  {
-    id: 'enq-102',
-    enquiryReference: 'SMN-BULK-1043',
-    customerName: 'Zydus Corporate Relations (Ananya Patel)',
-    contactNumber: '+91 94270 88912',
-    email: 'ananya.p@zyduscorp.example',
-    occasion: 'Corporate Gifting',
-    requestedDate: '2026-11-02',
-    requestedProducts: 'Royal Heritage Gift Hamper (Assorted Dry Fruit sweets & Farali Chevdo)',
-    approximateQuantity: '150 Gift Boxes',
-    collectionOrDelivery: 'delivery',
-    deliveryAddress: 'Zydus Corporate Tower, Satellite, Ahmedabad',
-    notes: 'Company greeting card insertion inside each gift box required.',
-    status: 'Confirmed',
-    internalNotes: 'Advance 50% received via RTGS. Packing scheduled for 1st Nov morning.',
-    assignedStaff: 'Rameshbhai',
-    createdAt: '2026-10-17T09:15:00Z',
-    updatedAt: '2026-10-18T16:00:00Z'
-  },
-  {
-    id: 'enq-103',
-    enquiryReference: 'SMN-BULK-1044',
-    customerName: 'Harshvardhan Mehta',
-    contactNumber: '+91 98980 12345',
-    email: 'hmehta@gmail.com',
-    occasion: 'Family Function',
-    requestedDate: '2026-10-28',
-    requestedProducts: 'Desi Ghee Jalebi (15 kg), Nylon Khaman (12 kg), Bhavnagari Gathiya (10 kg)',
-    approximateQuantity: '37 kg Total',
-    collectionOrDelivery: 'pickup',
-    notes: 'For Vastu Puja breakfast. Need ready at Manek Chowk counter by 7:30 AM sharp.',
-    status: 'New',
-    internalNotes: 'Fresh morning batch frying to start at 6:00 AM.',
-    assignedStaff: 'Sukhadiyaji',
-    createdAt: '2026-10-20T08:00:00Z',
-    updatedAt: '2026-10-20T08:00:00Z'
-  },
-  {
-    id: 'enq-104',
-    enquiryReference: 'SMN-BULK-1045',
-    customerName: 'Kalyan Jewellers Staff Association',
-    contactNumber: '+91 99244 55667',
-    occasion: 'Festival',
-    requestedDate: '2026-11-08',
-    requestedProducts: 'Anjeer Dryfruit Roll (20 kg), Kaju Katli (25 kg)',
-    approximateQuantity: '45 kg in 1 kg tins',
-    collectionOrDelivery: 'discuss',
-    notes: 'Diwali staff hampers. Looking for competitive quotation.',
-    status: 'Contacted',
-    internalNotes: 'Spoke on phone, sent PDF catalog via WhatsApp.',
-    assignedStaff: 'Maheshbhai',
-    createdAt: '2026-10-19T11:45:00Z',
-    updatedAt: '2026-10-20T10:10:00Z'
-  }
-];
+export const INITIAL_BULK_ENQUIRIES: BulkEnquiry[] = [];
 
 class StoreService {
   private products: Product[] = [];
