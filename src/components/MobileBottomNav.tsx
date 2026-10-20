@@ -225,6 +225,19 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                 <Phone size={16} /> Chat on WhatsApp ({settings.verifiedWhatsAppNumber})
               </a>
 
+              {currentUser?.role === 'admin' && onToggleAdmin && (
+                <button
+                  onClick={() => {
+                    setMoreMenuOpen(false);
+                    onToggleAdmin();
+                  }}
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center', fontSize: '0.88rem' }}
+                >
+                  <Lock size={15} /> Switch to Staff Admin Dashboard
+                </button>
+              )}
+
               {/* Logged in User Card & Sign Out */}
               {currentUser && (
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#FFF1DC', padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid #EEDCCA', marginTop: '0.25rem' }}>
