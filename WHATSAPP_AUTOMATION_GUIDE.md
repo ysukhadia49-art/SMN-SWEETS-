@@ -23,7 +23,7 @@ _Pure Desi Ghee & Cashew Delicacies Since 1849 | Manek Chowk, Ahmedabad_ 🍬✨
 Thank you for reaching out! Here are our complete shop details and digital storefront:
 
 🌐 *Browse 79+ Traditional Sweets & Live Rate Card:*
-👉 https://ysukhadia49-art.github.io/SMN-SWEETS-/
+👉 https://smn-sweets.vercel.app/
 
 📍 *Shop Location & Google Maps Counter:*
 👉 https://maps.app.goo.gl/1h4LNKy4z7mjN2xEA?g_st=ac
@@ -50,8 +50,8 @@ _Please let us know how we can assist you today!_
 ### Setup Quick Replies (Shortcuts for Fast Responses):
 1. In **Business Tools**, tap **Quick replies**.
 2. Tap **(+)** to add shortcuts:
-   - Shortcut `/menu` → Sends the sweet catalog link: `https://ysukhadia49-art.github.io/SMN-SWEETS-/#sweets`
-   - Shortcut `/bulk` → Sends the bulk orders page: `https://ysukhadia49-art.github.io/SMN-SWEETS-/#bulk-orders`
+   - Shortcut `/menu` → Sends the sweet catalog link: `https://smn-sweets.vercel.app/#sweets`
+   - Shortcut `/bulk` → Sends the bulk orders page: `https://smn-sweets.vercel.app/#bulk-orders`
    - Shortcut `/map` → Sends the Google Maps link: `https://maps.app.goo.gl/1h4LNKy4z7mjN2xEA?g_st=ac`
 
 ---

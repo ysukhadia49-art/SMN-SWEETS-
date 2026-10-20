@@ -1,7 +1,8 @@
 # Sukhadiya Manilal Nathalal — Premium Mithai & Farsan Storefront
 
 > **Location:** Shop No. 12, Near Choksi Bazar, Manek Chowk, Khadia, Ahmedabad, Gujarat 380001, India  
-> **Heritage:** Established 1948 • 100% Pure Desi Ghee • Traditional Gujarati Halwai Craftsmanship  
+> **Heritage:** Established 1849 • 100% Pure Desi Ghee • Traditional Gujarati Halwai Craftsmanship  
+> **Live Website:** [https://smn-sweets.vercel.app/](https://smn-sweets.vercel.app/)  
 > **UI Theme:** Cream (`#FFF8ED`) × Signature Orange (`#F97316` / `#EA580C`)  
 > **Design Direction:** Modern, editorial, minimal — zero AI slop, zero SaaS clutter.
 

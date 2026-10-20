@@ -28,7 +28,7 @@ const SHOP_CONFIG = {
   address: 'Shop No. 9, 10, 11, Kandoi Ol, Manek Chowk, Ahmedabad - 380001',
   phone: '+91 823 877 3681',
   mapsUrl: 'https://maps.app.goo.gl/1h4LNKy4z7mjN2xEA?g_st=ac',
-  websiteUrl: 'https://ysukhadia49-art.github.io/SMN-SWEETS-/',
+  websiteUrl: 'https://smn-sweets.vercel.app/',
   hours: '8:00 AM – 10:30 PM (Open 7 Days)'
 };
 

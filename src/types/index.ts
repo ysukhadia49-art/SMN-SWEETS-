@@ -102,6 +102,7 @@ export interface ShopSettings {
   establishedYear: string;
   purityGuarantee: string;
   language: 'en' | 'gu';
+  websiteUrl?: string;
 }
 
 export interface AnalyticsSummary {

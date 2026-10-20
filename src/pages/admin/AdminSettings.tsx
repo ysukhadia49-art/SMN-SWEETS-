@@ -230,6 +230,17 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ settings, onRefres
             />
           </div>
 
+          <div className="form-group">
+            <label className="form-label">Live Storefront / Website URL (Vercel)</label>
+            <input
+              type="url"
+              value={formData.websiteUrl || 'https://smn-sweets.vercel.app/'}
+              onChange={(e) => setFormData({ ...formData, websiteUrl: e.target.value })}
+              className="form-input"
+              placeholder="https://smn-sweets.vercel.app/"
+            />
+          </div>
+
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             <div className="form-group">
               <label className="form-label">Calling Landline / Counter Phone</label>

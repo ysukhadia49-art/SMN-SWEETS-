@@ -16,7 +16,8 @@ export const OFFICIAL_SHOP_SETTINGS: ShopSettings = {
   openingHours: 'Monday – Sunday: 8:00 AM – 10:30 PM (Open 7 Days)',
   establishedYear: '1849/2022',
   purityGuarantee: 'ચોખ્ખા ઘી ની મીઠાઈઓ અને કાજુની આઈટમ હોલસેલ ભાવે મળશે • 100% Pure Ghee & Wholesale Cashew Sweets',
-  language: 'en'
+  language: 'en',
+  websiteUrl: 'https://smn-sweets.vercel.app/'
 };
 
 export const MENU_CATEGORIES: Category[] = [
