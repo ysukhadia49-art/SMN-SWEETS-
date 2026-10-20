@@ -34,9 +34,8 @@ import { Phone } from 'lucide-react';
 import { generateDirectShopWhatsAppUrl } from './utils/whatsapp';
 
 export function App() {
-  // Authentication State (Google ID sign-in or guest browsing)
+  // Authentication State (Gmail / Google sign-in required)
   const [currentUser, setCurrentUser] = useState<User | null>(() => authService.getCurrentUser());
-  const [isGuest, setIsGuest] = useState<boolean>(false);
 
   // Navigation State
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -69,7 +68,7 @@ export function App() {
     refreshData();
 
     // Body class for mobile bottom navigation spacing
-    if ((currentUser || isGuest) && !isAdmin) {
+    if (currentUser && !isAdmin) {
       document.body.classList.add('has-bottom-nav');
     } else {
       document.body.classList.remove('has-bottom-nav');
@@ -96,7 +95,7 @@ export function App() {
       setCurrentPage('sweets');
       window.location.hash = '';
     }
-  }, [isAdmin, currentUser, isGuest]);
+  }, [isAdmin, currentUser]);
 
   const handleNavigateCustomer = (page: CustomerPage) => {
     setCurrentPage(page);
@@ -119,23 +118,17 @@ export function App() {
   const handleLogout = () => {
     authService.logout();
     setCurrentUser(null);
-    setIsGuest(false);
     setIsAdmin(false);
     window.location.hash = '';
   };
 
-  /* ================= GOOGLE ID / GUEST GATE ================= */
-  if (!currentUser && !isGuest) {
+  /* ================= GMAIL AUTHENTICATION GATE ================= */
+  if (!currentUser) {
     return (
       <LoginPage
         settings={settings}
         onLoginSuccess={(user) => {
           setCurrentUser(user);
-          setIsGuest(false);
-          refreshData();
-        }}
-        onContinueAsGuest={() => {
-          setIsGuest(true);
           refreshData();
         }}
       />

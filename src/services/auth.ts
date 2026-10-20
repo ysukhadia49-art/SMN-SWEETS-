@@ -156,13 +156,13 @@ class AuthService {
         .map(s => s.charAt(0).toUpperCase() + s.slice(1))
         .join(' ');
 
-      const isAdmin = cleanEmail.includes('admin') || cleanEmail.includes('smnsweets');
+      const isAdmin = cleanEmail.includes('admin') || cleanEmail.includes('smnsweets') || cleanEmail.includes('yug') || cleanEmail === 'ysukhadia49@gmail.com';
 
       existing = {
         id: `google-user-${Date.now()}`,
         name: name || fallbackName || 'Google User',
         email: cleanEmail,
-        phone: '+91 98250 12345',
+        phone: '+91 823 877 3681',
         role: isAdmin ? 'admin' : 'customer',
         createdAt: new Date().toISOString(),
         passwordHash: 'google_oauth_token',
@@ -209,6 +209,41 @@ class AuthService {
     try {
       localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(user));
     } catch {}
+  }
+}
+
+export interface GoogleJwtPayload {
+  iss?: string;
+  nbf?: number;
+  aud?: string;
+  sub?: string;
+  email: string;
+  email_verified?: boolean;
+  name?: string;
+  picture?: string;
+  given_name?: string;
+  family_name?: string;
+}
+
+/**
+ * Decodes Google Identity Services (GIS) JWT ID Token payload in browser.
+ */
+export function decodeGoogleJwt(credential: string): GoogleJwtPayload | null {
+  try {
+    const parts = credential.split('.');
+    if (parts.length < 2) return null;
+    const base64Url = parts[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch (err) {
+    console.error('Failed to decode Google JWT credential', err);
+    return null;
   }
 }
 

@@ -204,6 +204,27 @@ describe('Sukhadiya Manilal Nathalal Platform Test Suite', () => {
       expect(user.authProvider).toBe('google');
       expect(authService.getCurrentUser()?.email).toBe('priya.mehta@gmail.com');
     });
+
+    it('decodes Google GIS JWT credentials correctly', async () => {
+      const { decodeGoogleJwt } = await import('./auth');
+      
+      // Construct a mock JWT: header.payload.signature
+      const mockPayload = {
+        sub: '10987654321',
+        email: 'ysukhadia49@gmail.com',
+        name: 'Yug Sukhadia',
+        picture: 'https://lh3.googleusercontent.com/a/mockphoto',
+        email_verified: true
+      };
+      const b64Payload = btoa(JSON.stringify(mockPayload));
+      const mockJwt = `eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.${b64Payload}.mockSignature`;
+
+      const decoded = decodeGoogleJwt(mockJwt);
+      expect(decoded).not.toBeNull();
+      expect(decoded?.email).toBe('ysukhadia49@gmail.com');
+      expect(decoded?.name).toBe('Yug Sukhadia');
+      expect(decoded?.sub).toBe('10987654321');
+    });
   });
 
   describe('7. Authentic Sukhadiya Rate Card Catalog Verification', () => {

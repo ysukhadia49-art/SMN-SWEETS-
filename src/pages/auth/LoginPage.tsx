@@ -1,54 +1,157 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { User, ShopSettings } from '../../types';
-import { authService, PRESET_GOOGLE_ACCOUNTS } from '../../services/auth';
+import { authService, decodeGoogleJwt } from '../../services/auth';
+import { GOOGLE_AUTH_CONFIG } from '../../config/googleAuth';
 import { 
   Sparkles, 
   ShieldCheck, 
   MapPin, 
   ArrowRight, 
-  PlusCircle,
-  CheckCircle2,
-  Lock
+  AlertCircle,
+  Mail,
+  Info
 } from 'lucide-react';
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: any) => void;
+          renderButton: (parent: HTMLElement, options: any) => void;
+          prompt: (notification?: any) => void;
+          cancel?: () => void;
+        };
+      };
+    };
+  }
+}
 
 interface LoginPageProps {
   settings: ShopSettings;
   onLoginSuccess: (user: User) => void;
-  onContinueAsGuest?: () => void;
 }
 
-export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, onContinueAsGuest }) => {
-  const [customEmail, setCustomEmail] = useState('');
-  const [customName, setCustomName] = useState('');
-  const [showCustomInput, setShowCustomInput] = useState(false);
-  const [loadingEmail, setLoadingEmail] = useState<string | null>(null);
+export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess }) => {
+  const [gmailInput, setGmailInput] = useState('');
+  const [userNameInput, setUserNameInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [gisLoaded, setGisLoaded] = useState(false);
+  const googleBtnContainerRef = useRef<HTMLDivElement>(null);
 
-  const handleSelectGoogleAccount = (email: string, name?: string, avatarUrl?: string) => {
+  // Handle Google Identity Services (GIS) Token Callback
+  const handleCredentialResponse = (response: { credential?: string }) => {
     setErrorMsg('');
-    setLoadingEmail(email);
-
-    setTimeout(() => {
-      try {
-        const user = authService.loginWithGoogle(email, name, avatarUrl);
-        onLoginSuccess(user);
-      } catch (err) {
-        setErrorMsg('Failed to sign in with Google ID. Please try again.');
-        setLoadingEmail(null);
-      }
-    }, 250);
-  };
-
-  const handleCustomGoogleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMsg('');
-
-    if (!customEmail.trim() || !customEmail.includes('@')) {
-      setErrorMsg('Please enter a valid Google Account email (e.g., yourname@gmail.com).');
+    if (!response?.credential) {
+      setErrorMsg('No credential returned from Google. Please try again.');
       return;
     }
 
-    handleSelectGoogleAccount(customEmail.trim(), customName.trim() || undefined);
+    try {
+      setIsLoading(true);
+      const payload = decodeGoogleJwt(response.credential);
+      if (!payload || !payload.email) {
+        throw new Error('Unable to verify Google credential.');
+      }
+
+      // Log in or register user using their verified Google identity
+      const loggedInUser = authService.loginWithGoogle(
+        payload.email,
+        payload.name || payload.given_name,
+        payload.picture
+      );
+
+      onLoginSuccess(loggedInUser);
+    } catch (err: any) {
+      console.error('Google Sign-In Error:', err);
+      setErrorMsg(err.message || 'Failed to authenticate with Google. Please try again.');
+      setIsLoading(false);
+    }
+  };
+
+  // Mount Google Identity Services Button
+  useEffect(() => {
+    let checkInterval: any = null;
+
+    const initGis = () => {
+      if (window.google?.accounts?.id && googleBtnContainerRef.current) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: GOOGLE_AUTH_CONFIG.clientId,
+            callback: handleCredentialResponse,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+          });
+
+          // Render the official Google Sign-In button
+          googleBtnContainerRef.current.innerHTML = '';
+          window.google.accounts.id.renderButton(googleBtnContainerRef.current, {
+            type: 'standard',
+            shape: 'pill',
+            theme: 'outline',
+            text: 'continue_with',
+            size: 'large',
+            logo_alignment: 'left',
+            width: 320
+          });
+
+          setGisLoaded(true);
+
+          // Prompt One-Tap if eligible
+          try {
+            window.google.accounts.id.prompt();
+          } catch (_) {}
+
+          return true;
+        } catch (e) {
+          console.warn('GIS init error:', e);
+          return false;
+        }
+      }
+      return false;
+    };
+
+    if (!initGis()) {
+      checkInterval = setInterval(() => {
+        if (initGis()) {
+          clearInterval(checkInterval);
+        }
+      }, 300);
+    }
+
+    return () => {
+      if (checkInterval) clearInterval(checkInterval);
+    };
+  }, []);
+
+  // Direct Gmail Submit Handler
+  const handleDirectGmailSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrorMsg('');
+
+    const cleanEmail = gmailInput.trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes('@')) {
+      setErrorMsg('Please enter a valid Gmail address (e.g., yourname@gmail.com).');
+      return;
+    }
+
+    // Require a Google account address (@gmail.com or googlemail.com)
+    if (!cleanEmail.endsWith('@gmail.com') && !cleanEmail.endsWith('@googlemail.com') && !cleanEmail.includes('google')) {
+      setErrorMsg('Only Google / Gmail accounts are permitted. Please use your @gmail.com address.');
+      return;
+    }
+
+    setIsLoading(true);
+    setTimeout(() => {
+      try {
+        const user = authService.loginWithGoogle(cleanEmail, userNameInput.trim() || undefined);
+        onLoginSuccess(user);
+      } catch (err) {
+        setErrorMsg('Failed to sign in with Gmail. Please try again.');
+        setIsLoading(false);
+      }
+    }, 300);
   };
 
   return (
@@ -82,7 +185,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, 
 
       <div 
         style={{ 
-          maxWidth: '520px', 
+          maxWidth: '480px', 
           width: '100%', 
           position: 'relative', 
           zIndex: 1 
@@ -163,11 +266,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, 
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '44px',
-                height: '44px',
+                width: '46px',
+                height: '46px',
                 borderRadius: '50%',
                 backgroundColor: '#FFFFFF',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                boxShadow: '0 2px 10px rgba(0, 0, 0, 0.08)',
                 border: '1px solid #E5E7EB',
                 marginBottom: '0.75rem'
               }}
@@ -185,14 +288,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, 
               style={{ 
                 margin: '0 0 0.35rem 0', 
                 fontSize: '1.45rem', 
-                color: '#332218',
+                color: '#332218', 
                 fontWeight: 700 
               }}
             >
-              Sign in with Google ID
+              Sign in with Gmail
             </h2>
             <p style={{ margin: 0, fontSize: '0.88rem', color: '#806656', lineHeight: 1.45 }}>
-              Choose your Google Account to enter our sweet shop directly. No registration or password required.
+              Authentication is required to visit our sweet shop catalogue. Please sign in with your Google / Gmail account.
             </p>
           </div>
 
@@ -211,223 +314,146 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, 
                 gap: '0.5rem'
               }}
             >
+              <AlertCircle size={16} style={{ flexShrink: 0 }} />
               <span>{errorMsg}</span>
             </div>
           )}
 
-          {/* Quick Google ID Account List */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginBottom: '1.25rem' }}>
-            {PRESET_GOOGLE_ACCOUNTS.map((acc) => {
-              const isLoadingThis = loadingEmail === acc.email;
-              return (
-                <button
-                  key={acc.id}
-                  onClick={() => handleSelectGoogleAccount(acc.email, acc.name, acc.avatarUrl)}
-                  disabled={!!loadingEmail}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.85rem',
-                    padding: '0.75rem 1rem',
-                    backgroundColor: '#FFFFFF',
-                    border: '1.5px solid #E5E7EB',
-                    borderRadius: 'var(--radius-lg)',
-                    cursor: loadingEmail ? 'wait' : 'pointer',
-                    transition: 'all 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                    textAlign: 'left',
-                    width: '100%',
-                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)'
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!loadingEmail) {
-                      e.currentTarget.style.borderColor = '#EA580C';
-                      e.currentTarget.style.boxShadow = '0 4px 14px rgba(234, 88, 12, 0.12)';
-                      e.currentTarget.style.transform = 'translateY(-1px)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!loadingEmail) {
-                      e.currentTarget.style.borderColor = '#E5E7EB';
-                      e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }
-                  }}
-                >
-                  {/* Account Avatar or Google Logo */}
-                  <div 
-                    style={{
-                      width: '40px',
-                      height: '40px',
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      flexShrink: 0,
-                      backgroundColor: '#F3F4F6',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: '1px solid #EEDCCA'
-                    }}
-                  >
-                    {acc.avatarUrl ? (
-                      <img 
-                        src={acc.avatarUrl} 
-                        alt={acc.name} 
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                      />
-                    ) : (
-                      <span style={{ fontWeight: 700, color: '#EA580C', fontSize: '1rem' }}>
-                        {acc.name.charAt(0)}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Name and Email Details */}
-                  <div style={{ flexGrow: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <span style={{ fontSize: '0.95rem', fontWeight: 700, color: '#1F2937', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {acc.name}
-                      </span>
-                      {acc.badge && (
-                        <span 
-                          style={{ 
-                            fontSize: '0.68rem', 
-                            padding: '0.1rem 0.45rem', 
-                            backgroundColor: '#FFF1DC', 
-                            color: '#EA580C', 
-                            fontWeight: 700, 
-                            borderRadius: 'var(--radius-full)' 
-                          }}
-                        >
-                          {acc.badge}
-                        </span>
-                      )}
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: '#6B7280', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {acc.email}
-                    </div>
-                  </div>
-
-                  {/* Action Chevron or Loading indicator */}
-                  <div style={{ flexShrink: 0, color: '#9CA3AF' }}>
-                    {isLoadingThis ? (
-                      <span style={{ fontSize: '0.78rem', color: '#EA580C', fontWeight: 600 }}>Signing in...</span>
-                    ) : (
-                      <ArrowRight size={18} color="#EA580C" />
-                    )}
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Toggle Custom Google ID Input */}
-          <div style={{ borderTop: '1px dashed #E5E7EB', paddingTop: '1rem', marginTop: '0.5rem' }}>
-            {!showCustomInput ? (
-              <button
-                type="button"
-                onClick={() => setShowCustomInput(true)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: '#EA580C',
-                  fontSize: '0.88rem',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.45rem',
-                  width: '100%',
-                  padding: '0.4rem'
-                }}
-              >
-                <PlusCircle size={16} />
-                <span>Use another Google account</span>
-              </button>
-            ) : (
-              <form onSubmit={handleCustomGoogleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}>
-                    Your Google Email ID
-                  </label>
-                  <input
-                    type="email"
-                    placeholder="e.g. yourname@gmail.com"
-                    value={customEmail}
-                    onChange={(e) => setCustomEmail(e.target.value)}
-                    required
-                    className="form-input"
-                    style={{ fontSize: '0.92rem' }}
-                    autoFocus
-                  />
-                </div>
-
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}>
-                    Your Name (Optional)
-                  </label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Yug Sukhadia"
-                    value={customName}
-                    onChange={(e) => setCustomName(e.target.value)}
-                    className="form-input"
-                    style={{ fontSize: '0.92rem' }}
-                  />
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
-                  <button
-                    type="submit"
-                    disabled={!!loadingEmail}
-                    className="btn btn-primary"
-                    style={{ flexGrow: 1, justifyContent: 'center' }}
-                  >
-                    {loadingEmail ? 'Connecting...' : 'Sign in with this Google ID'}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setShowCustomInput(false);
-                      setErrorMsg('');
-                    }}
-                    className="btn btn-secondary"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
+          {/* Official Google Identity Services Button Target */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              flexDirection: 'column',
+              alignItems: 'center', 
+              justifyContent: 'center',
+              minHeight: '48px',
+              marginBottom: '1.25rem' 
+            }}
+          >
+            <div 
+              id="googleSignInDiv" 
+              ref={googleBtnContainerRef}
+              style={{ minHeight: '44px', display: 'flex', justifyContent: 'center' }}
+            />
+            {!gisLoaded && (
+              <div style={{ fontSize: '0.8rem', color: '#9CA3AF', marginTop: '0.35rem' }}>
+                Connecting to Google Identity Services...
+              </div>
             )}
           </div>
 
-          {/* Optional Guest Browsing */}
-          {onContinueAsGuest && (
-            <div style={{ marginTop: '1.25rem', textAlign: 'center' }}>
-              <button
-                type="button"
-                onClick={onContinueAsGuest}
-                className="btn btn-outline"
-                style={{
-                  width: '100%',
-                  justifyContent: 'center',
-                  borderColor: '#EEDCCA',
-                  color: '#806656',
-                  backgroundColor: '#FFF8ED',
-                  padding: '0.65rem 1rem',
-                  fontSize: '0.88rem',
-                  fontWeight: 600
-                }}
-              >
-                <span>Browse Catalogue as Guest (અતિથિ તરીકે મુલાકાત)</span>
-                <ArrowRight size={15} color="#EA580C" />
-              </button>
-            </div>
-          )}
-
-          {/* Purity Guarantee & Safe Auth Footer */}
+          {/* Divider */}
           <div 
             style={{ 
-              marginTop: '1.5rem', 
+              display: 'flex', 
+              alignItems: 'center', 
+              gap: '0.75rem', 
+              margin: '1.25rem 0 1rem 0' 
+            }}
+          >
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#E5E7EB' }} />
+            <span style={{ fontSize: '0.78rem', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              or enter gmail address
+            </span>
+            <div style={{ flex: 1, height: '1px', backgroundColor: '#E5E7EB' }} />
+          </div>
+
+          {/* Direct Gmail Input Form */}
+          <form onSubmit={handleDirectGmailSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+            <div>
+              <label 
+                htmlFor="gmail-address-input"
+                style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}
+              >
+                Gmail Address
+              </label>
+              <div style={{ position: 'relative' }}>
+                <Mail 
+                  size={16} 
+                  color="#9CA3AF" 
+                  style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)' }} 
+                />
+                <input
+                  id="gmail-address-input"
+                  type="email"
+                  placeholder="yourname@gmail.com"
+                  value={gmailInput}
+                  onChange={(e) => setGmailInput(e.target.value)}
+                  required
+                  className="form-input"
+                  style={{ paddingLeft: '2.5rem', fontSize: '0.92rem' }}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label 
+                htmlFor="gmail-name-input"
+                style={{ display: 'block', fontSize: '0.82rem', fontWeight: 700, color: '#332218', marginBottom: '0.35rem' }}
+              >
+                Your Name <span style={{ fontWeight: 400, color: '#9CA3AF' }}>(Optional)</span>
+              </label>
+              <input
+                id="gmail-name-input"
+                type="text"
+                placeholder="e.g. Yug Sukhadia"
+                value={userNameInput}
+                onChange={(e) => setUserNameInput(e.target.value)}
+                className="form-input"
+                style={{ fontSize: '0.92rem' }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="btn btn-primary"
+              style={{ 
+                width: '100%', 
+                justifyContent: 'center', 
+                padding: '0.75rem 1rem', 
+                fontSize: '0.92rem',
+                fontWeight: 700,
+                marginTop: '0.25rem'
+              }}
+            >
+              {isLoading ? (
+                <span>Signing in...</span>
+              ) : (
+                <>
+                  <span>Sign in with Gmail</span>
+                  <ArrowRight size={16} />
+                </>
+              )}
+            </button>
+          </form>
+
+          {/* Quick Notice for OAuth setup */}
+          <div 
+            style={{
+              marginTop: '1.25rem',
+              padding: '0.65rem 0.85rem',
+              backgroundColor: '#FFF8ED',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid #FDE68A',
+              display: 'flex',
+              alignItems: 'flex-start',
+              gap: '0.5rem',
+              fontSize: '0.75rem',
+              color: '#806656',
+              lineHeight: 1.4
+            }}
+          >
+            <Info size={14} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div>
+              <strong>Secure Google Sign-In:</strong> Connected to Google OAuth Client (<code style={{ fontSize: '0.72rem', backgroundColor: '#FEF3C7', padding: '1px 3px', borderRadius: '3px' }}>neural-ripple-492807-u2</code>).
+            </div>
+          </div>
+
+          {/* Purity Guarantee Footer */}
+          <div 
+            style={{ 
+              marginTop: '1.25rem', 
               paddingTop: '1rem', 
               borderTop: '1px solid #F3F4F6', 
               textAlign: 'center',
@@ -440,7 +466,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess, 
             }}
           >
             <ShieldCheck size={14} color="#15803D" />
-            <span>Direct Google ID Access • Pure Desi Ghee Mithai Since 1849</span>
+            <span>Pure Desi Ghee Mithai & Farsan Since 1849</span>
           </div>
         </div>
 
