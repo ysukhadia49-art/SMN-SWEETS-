@@ -20,7 +20,7 @@ interface NavbarProps {
   onNavigate: (page: CustomerPage) => void;
   settings: ShopSettings;
   isAdmin: boolean;
-  onToggleAdmin: () => void;
+  onToggleAdmin?: () => void;
   onOpenTracker: () => void;
   currentUser: User | null;
   onLogout: () => void;
@@ -41,7 +41,6 @@ export const Navbar: React.FC<NavbarProps> = ({
   const navItems: { id: CustomerPage; label: string; guLabel: string }[] = [
     { id: 'home', label: 'Home', guLabel: 'મુખ્ય પૃષ્ઠ' },
     { id: 'sweets', label: 'Our Sweets', guLabel: 'મીઠાઈઓ' },
-    { id: 'farsan', label: 'Farsan', guLabel: 'ફરસાણ' },
     { id: 'gift-boxes', label: 'Gift Boxes', guLabel: 'ગિફ્ટ બોક્સ' },
     { id: 'bulk-orders', label: 'Bulk Orders', guLabel: 'બલ્ક ઓર્ડર' },
     { id: 'about', label: 'About Us', guLabel: 'અમારા વિશે' },
@@ -73,7 +72,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <Sparkles size={14} color="#F97316" />
-          <span>Tradition in Every Bite • Pure Desi Ghee Sweets & Fresh Farsan</span>
+          <span>Tradition in Every Bite • Pure Desi Ghee Sweets & Festive Gift Boxes</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.85 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
@@ -164,7 +163,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   marginTop: '0.15rem'
                 }}
               >
-                <span>Mithai & Farsan</span>
+                <span>Pure Mithai & Gift Hampers</span>
                 <span>•</span>
                 <span>Manek Chowk, Ahmedabad</span>
               </div>
@@ -329,28 +328,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span>Google Sign In</span>
               </button>
             )}
-
-            {/* Admin Switcher Badge Button */}
-            <button
-              onClick={onToggleAdmin}
-              style={{
-                backgroundColor: isAdmin ? '#EA580C' : '#332218',
-                color: '#FFFEFA',
-                border: 'none',
-                padding: '0.45rem 0.85rem',
-                borderRadius: 'var(--radius-full)',
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.4rem',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.1)'
-              }}
-              title={isAdmin ? "Switch to Public Storefront" : "Enter Shop Admin Dashboard"}
-            >
-              <span>{isAdmin ? "Exit Admin" : "Admin"}</span>
-            </button>
 
             {/* Mobile Menu Toggle */}
             <button

@@ -16,10 +16,10 @@ import { generateDirectShopWhatsAppUrl } from '../utils/whatsapp';
 interface FooterProps {
   onNavigate: (page: CustomerPage) => void;
   settings: ShopSettings;
-  onToggleAdmin: () => void;
+  onToggleAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onToggleAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, settings }) => {
   return (
     <footer 
       style={{ 
@@ -72,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onToggleAd
             
             <p style={{ fontSize: '0.92rem', color: '#806656', lineHeight: 1.6, marginBottom: '1.25rem' }}>
               Preserving the authentic culinary heritage of Gujarat for generations. We take pride in 
-              handcrafting pure desi ghee sweets, traditional crunchy farsan, and exquisite celebratory gift boxes.
+              handcrafting pure desi ghee sweets, celebratory mithai hampers, and exquisite gift boxes.
             </p>
 
             <div 
@@ -120,7 +120,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onToggleAd
               {[
                 { id: 'home', label: 'Home Page' },
                 { id: 'sweets', label: 'Traditional Sweets & Mithai' },
-                { id: 'farsan', label: 'Gujarati Namkeen & Farsan' },
                 { id: 'gift-boxes', label: 'Festive & Shagun Gift Boxes' },
                 { id: 'bulk-orders', label: 'Bulk Orders & Wedding Enquiries' },
                 { id: 'about', label: 'Our Story & Heritage' },
@@ -246,24 +245,6 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings, onToggleAd
             >
               WhatsApp Support
             </a>
-            <button
-              onClick={onToggleAdmin}
-              style={{
-                background: 'none',
-                border: 'none',
-                padding: 0,
-                color: '#806656',
-                cursor: 'pointer',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.3rem',
-                fontSize: '0.82rem'
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#EA580C')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#806656')}
-            >
-              <Lock size={12} /> Staff Admin Portal
-            </button>
           </div>
         </div>
       </div>

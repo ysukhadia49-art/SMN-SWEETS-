@@ -14,7 +14,6 @@ import { ProductModal } from './components/ProductModal';
 import { EnquiryTrackerModal } from './components/EnquiryTrackerModal';
 import { HomePage } from './pages/customer/HomePage';
 import { OurSweetsPage } from './pages/customer/OurSweetsPage';
-import { FarsanPage } from './pages/customer/FarsanPage';
 import { GiftBoxesPage } from './pages/customer/GiftBoxesPage';
 import { BulkOrdersPage } from './pages/customer/BulkOrdersPage';
 import { AboutUsPage } from './pages/customer/AboutUsPage';
@@ -78,10 +77,9 @@ export function App() {
     const hash = window.location.hash.toLowerCase();
     if (hash === '#admin') {
       setIsAdmin(true);
-    } else if (hash === '#sweets') {
+    } else if (hash === '#sweets' || hash === '#farsan') {
       setCurrentPage('sweets');
-    } else if (hash === '#farsan') {
-      setCurrentPage('farsan');
+      if (hash === '#farsan') window.location.hash = 'sweets';
     } else if (hash === '#gift-boxes') {
       setCurrentPage('gift-boxes');
     } else if (hash === '#bulk-orders') {
@@ -229,13 +227,6 @@ export function App() {
               <OurSweetsPage
                 products={products}
                 categories={categories}
-                onSelectProduct={setSelectedProduct}
-                settings={settings}
-              />
-            )}
-            {currentPage === 'farsan' && (
-              <FarsanPage
-                products={products}
                 onSelectProduct={setSelectedProduct}
                 settings={settings}
               />

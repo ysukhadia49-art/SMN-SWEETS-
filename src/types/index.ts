@@ -120,7 +120,6 @@ export interface AnalyticsSummary {
 export type CustomerPage = 
   | 'home'
   | 'sweets'
-  | 'farsan'
   | 'gift-boxes'
   | 'bulk-orders'
   | 'about'

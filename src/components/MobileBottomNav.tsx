@@ -23,7 +23,7 @@ interface MobileBottomNavProps {
   currentPage: CustomerPage;
   onNavigate: (page: CustomerPage) => void;
   settings: ShopSettings;
-  onToggleAdmin: () => void;
+  onToggleAdmin?: () => void;
   onOpenTracker: () => void;
   currentUser: User | null;
   onLogout: () => void;
@@ -112,7 +112,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             {/* Quick Menu Items */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem', marginBottom: '1.25rem' }}>
               <button
-                onClick={() => handleItemClick('gift-boxes')}
+                onClick={() => handleItemClick('sweets')}
                 style={{
                   backgroundColor: '#FFF8ED',
                   border: '1px solid #EEDCCA',
@@ -126,9 +126,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   textAlign: 'left'
                 }}
               >
-                <Gift size={20} color="#EA580C" />
-                <strong style={{ fontSize: '0.9rem', color: '#332218' }}>Gift Boxes</strong>
-                <span style={{ fontSize: '0.75rem', color: '#806656' }}>Hampers & Shagun</span>
+                <Sparkles size={20} color="#EA580C" />
+                <strong style={{ fontSize: '0.9rem', color: '#332218' }}>Our Sweets</strong>
+                <span style={{ fontSize: '0.75rem', color: '#806656' }}>Pure Desi Ghee</span>
               </button>
 
               <button
@@ -206,18 +206,6 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               >
                 <Phone size={16} /> Chat on WhatsApp ({settings.verifiedWhatsAppNumber})
               </a>
-
-              {/* Admin Portal Entry */}
-              <button
-                onClick={() => {
-                  setMoreMenuOpen(false);
-                  onToggleAdmin();
-                }}
-                className="btn btn-secondary"
-                style={{ width: '100%', justifyContent: 'center', fontSize: '0.88rem' }}
-              >
-                <Lock size={15} /> Switch to Staff Admin Dashboard
-              </button>
 
               {/* Logged in User Card & Sign Out */}
               {currentUser && (
@@ -319,9 +307,9 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           </span>
         </button>
 
-        {/* 3. Farsan */}
+        {/* 3. Gift Boxes */}
         <button
-          onClick={() => handleItemClick('farsan')}
+          onClick={() => handleItemClick('gift-boxes')}
           style={{
             background: 'none',
             border: 'none',
@@ -331,14 +319,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             alignItems: 'center',
             gap: '0.2rem',
             padding: '0.35rem',
-            color: currentPage === 'farsan' && !moreMenuOpen ? '#EA580C' : '#806656',
+            color: currentPage === 'gift-boxes' && !moreMenuOpen ? '#EA580C' : '#806656',
             minWidth: '56px',
             transition: 'color 0.15s ease'
           }}
         >
-          <Flame size={20} strokeWidth={currentPage === 'farsan' && !moreMenuOpen ? 2.4 : 1.8} />
-          <span style={{ fontSize: '0.68rem', fontWeight: currentPage === 'farsan' && !moreMenuOpen ? 700 : 500 }}>
-            Farsan
+          <Gift size={20} strokeWidth={currentPage === 'gift-boxes' && !moreMenuOpen ? 2.4 : 1.8} />
+          <span style={{ fontSize: '0.68rem', fontWeight: currentPage === 'gift-boxes' && !moreMenuOpen ? 700 : 500 }}>
+            Gift Boxes
           </span>
         </button>
 

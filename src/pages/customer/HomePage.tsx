@@ -34,10 +34,6 @@ export const HomePage: React.FC<HomePageProps> = ({
     .filter(p => p.isFeatured && p.categoryId !== 'cat-farsan')
     .slice(0, 8);
 
-  const traditionalFarsan = products
-    .filter(p => p.categoryId === 'cat-farsan')
-    .slice(0, 3);
-
   const giftBoxes = products
     .filter(p => p.categoryId === 'cat-giftboxes')
     .slice(0, 2);
@@ -123,7 +119,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   maxWidth: '540px'
                 }}
               >
-                Discover the rich taste of traditional Indian mithai and farsan, crafted for celebrations and everyday moments.
+                Discover the rich taste of traditional Indian mithai, pure desi ghee sweets, and festive gift boxes, crafted for celebrations and everyday moments.
               </p>
 
               {/* Exact Buttons */}
@@ -260,57 +256,7 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 3. TRADITIONAL FARSAN SECTION */}
-      <section 
-        style={{ 
-          backgroundColor: '#FFF1DC', 
-          borderTop: '1px solid #EEDCCA', 
-          borderBottom: '1px solid #EEDCCA',
-          paddingTop: ' clamp(3rem, 5vw, 5rem)',
-          paddingBottom: 'clamp(3rem, 5vw, 5rem)'
-        }}
-      >
-        <div className="container">
-          <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', gap: '1rem' }}>
-            <div>
-              <span className="badge badge-orange" style={{ marginBottom: '0.5rem' }}>
-                Ahmedabadi Pride
-              </span>
-              <h2 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.4rem)', color: '#332218', margin: 0 }}>
-                Traditional Farsan
-              </h2>
-              <p style={{ fontSize: '1rem', color: '#806656', marginTop: '0.35rem' }}>
-                Crunchy, aromatic namkeen fried in pure groundnut oil with authentic Gujarati seasoning.
-              </p>
-            </div>
-            <button
-              onClick={() => onNavigate('farsan')}
-              className="btn btn-secondary"
-            >
-              View All Farsan <ArrowRight size={16} />
-            </button>
-          </div>
-
-          <div 
-            style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', 
-              gap: '1.75rem' 
-            }}
-          >
-            {traditionalFarsan.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onSelect={onSelectProduct}
-                verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. SIGNATURE COLLECTIONS & GIFT BOXES */}
+      {/* 3. SIGNATURE COLLECTIONS & GIFT BOXES */}
       <section className="section-padding">
         <div className="container">
           <div 
