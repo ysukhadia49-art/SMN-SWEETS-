@@ -121,59 +121,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       {/* Card Content */}
-      <div 
-        style={{ 
-          padding: '1.25rem', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          flexGrow: 1 
-        }}
-      >
+      <div className="product-card-body">
         {/* Title & Gujarati Script */}
-        <div style={{ marginBottom: '0.5rem' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem' }}>
-            <h3 
-              style={{ 
-                fontSize: '1.15rem', 
-                fontWeight: 700, 
-                color: '#332218', 
-                margin: 0,
-                lineHeight: 1.3
-              }}
-            >
-              {product.name}
-            </h3>
-          </div>
+        <div style={{ marginBottom: '0.4rem', minWidth: 0 }}>
+          <h3 className="product-card-title">
+            {product.name}
+          </h3>
           {product.nameGu && (
-            <span style={{ fontSize: '0.85rem', color: '#EA580C', fontWeight: 600, display: 'block', marginTop: '0.15rem' }}>
+            <span className="product-card-title-gu">
               {product.nameGu}
             </span>
           )}
         </div>
 
         {/* Short Description */}
-        <p 
-          style={{ 
-            fontSize: '0.86rem', 
-            color: '#806656', 
-            lineHeight: 1.5,
-            marginBottom: '1rem',
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden'
-          }}
-        >
+        <p className="product-card-desc">
           {product.description}
         </p>
 
         {/* Packaging Selector */}
         {product.packageSizes && product.packageSizes.length > 0 && (
-          <div style={{ marginBottom: '1rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#806656', textTransform: 'uppercase', letterSpacing: '0.04em', display: 'block', marginBottom: '0.35rem' }}>
+          <div className="product-pack-section">
+            <span className="product-pack-title">
               Packaging Options:
             </span>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+            <div className="product-pack-pills">
               {product.packageSizes.map((pack, idx) => {
                 const isSelected = idx === selectedPackIndex;
                 return (
@@ -181,17 +153,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     key={pack.label}
                     onClick={() => setSelectedPackIndex(idx)}
                     type="button"
-                    style={{
-                      fontSize: '0.78rem',
-                      fontWeight: isSelected ? 700 : 500,
-                      padding: '0.25rem 0.65rem',
-                      borderRadius: 'var(--radius-full)',
-                      border: isSelected ? '1px solid #EA580C' : '1px solid #EEDCCA',
-                      backgroundColor: isSelected ? '#FFF1DC' : '#FFFEFA',
-                      color: isSelected ? '#EA580C' : '#806656',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
+                    className={`product-pack-pill ${isSelected ? 'selected' : ''}`}
                   >
                     {pack.label}
                   </button>
@@ -202,50 +164,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         )}
 
         {/* Pricing & Enquiry Action Footer */}
-        <div 
-          style={{ 
-            marginTop: 'auto', 
-            paddingTop: '0.85rem', 
-            borderTop: '1px solid #F5EAE0',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: '0.5rem'
-          }}
-        >
-          <div>
-            <div style={{ fontSize: '0.72rem', color: '#806656', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-              {product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pricing'}
-            </div>
-            <div 
-              style={{ 
-                fontFamily: 'var(--font-serif)', 
-                fontSize: displayPrice ? '1.25rem' : '1.05rem', 
-                fontWeight: 700, 
-                color: displayPrice ? '#EA580C' : '#806656' 
-              }}
-            >
+        <div className="product-card-footer">
+          {/* Price Row */}
+          <div className="product-card-price-row">
+            <span className="product-card-price-label">
+              {product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pure Mithai'}
+            </span>
+            <div className="product-card-price-val">
               {formatINR(displayPrice)}
             </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          {/* Actions Row: Preview & Enquire */}
+          <div className="product-card-actions">
             <button
               onClick={() => onSelect(product)}
-              className="btn btn-secondary btn-sm"
-              style={{ padding: '0.45rem 0.65rem' }}
-              title="View product specifications and details"
+              className="product-card-preview-btn"
+              title="View product details & ingredients"
+              aria-label="View product details"
             >
-              <Eye size={15} />
+              <Eye size={16} />
             </button>
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-whatsapp btn-sm"
+              className="product-card-enquire-btn"
               title="Enquire on WhatsApp"
             >
-              <Phone size={14} />
+              <Phone size={15} />
               <span>Enquire</span>
             </a>
           </div>

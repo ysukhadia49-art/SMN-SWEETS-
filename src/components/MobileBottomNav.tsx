@@ -273,11 +273,12 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           borderTop: '1px solid #EEDCCA',
           boxShadow: '0 -4px 16px rgba(51, 34, 24, 0.08)',
           zIndex: 80,
-          display: 'flex',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(5, 1fr)',
           alignItems: 'center',
-          justifyContent: 'space-around',
-          padding: '0.35rem 0.5rem calc(0.35rem + env(safe-area-inset-bottom, 0px))',
-          height: 'calc(62px + env(safe-area-inset-bottom, 0px))'
+          height: 'calc(62px + env(safe-area-inset-bottom, 0px))',
+          paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+          width: '100%'
         }}
       >
         {/* 1. Home */}
@@ -290,15 +291,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.2rem',
-            padding: '0.35rem',
+            justifyContent: 'center',
+            gap: '0.15rem',
+            padding: '0.25rem 0',
+            width: '100%',
+            minWidth: 0,
+            minHeight: '44px',
             color: currentPage === 'home' && !moreMenuOpen ? '#EA580C' : '#806656',
-            minWidth: '56px',
             transition: 'color 0.15s ease'
           }}
         >
           <Home size={20} strokeWidth={currentPage === 'home' && !moreMenuOpen ? 2.4 : 1.8} />
-          <span style={{ fontSize: '0.68rem', fontWeight: currentPage === 'home' && !moreMenuOpen ? 700 : 500 }}>
+          <span style={{ fontSize: '0.67rem', fontWeight: currentPage === 'home' && !moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Home
           </span>
         </button>
@@ -313,15 +317,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.2rem',
-            padding: '0.35rem',
+            justifyContent: 'center',
+            gap: '0.15rem',
+            padding: '0.25rem 0',
+            width: '100%',
+            minWidth: 0,
+            minHeight: '44px',
             color: currentPage === 'sweets' && !moreMenuOpen ? '#EA580C' : '#806656',
-            minWidth: '56px',
             transition: 'color 0.15s ease'
           }}
         >
           <Sparkles size={20} strokeWidth={currentPage === 'sweets' && !moreMenuOpen ? 2.4 : 1.8} />
-          <span style={{ fontSize: '0.68rem', fontWeight: currentPage === 'sweets' && !moreMenuOpen ? 700 : 500 }}>
+          <span style={{ fontSize: '0.67rem', fontWeight: currentPage === 'sweets' && !moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Sweets
           </span>
         </button>
@@ -336,39 +343,44 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.2rem',
-            padding: '0.35rem',
+            justifyContent: 'center',
+            gap: '0.15rem',
+            padding: '0.25rem 0',
+            width: '100%',
+            minWidth: 0,
+            minHeight: '44px',
             color: currentPage === 'gift-boxes' && !moreMenuOpen ? '#EA580C' : '#806656',
-            minWidth: '56px',
             transition: 'color 0.15s ease'
           }}
         >
           <Gift size={20} strokeWidth={currentPage === 'gift-boxes' && !moreMenuOpen ? 2.4 : 1.8} />
-          <span style={{ fontSize: '0.68rem', fontWeight: currentPage === 'gift-boxes' && !moreMenuOpen ? 700 : 500 }}>
+          <span style={{ fontSize: '0.67rem', fontWeight: currentPage === 'gift-boxes' && !moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Gift Boxes
           </span>
         </button>
 
-        {/* 4. Bulk Orders (Highlighted) */}
+        {/* 4. Bulk Orders */}
         <button
           onClick={() => handleItemClick('bulk-orders')}
           style={{
-            background: currentPage === 'bulk-orders' && !moreMenuOpen ? '#EA580C' : '#FFF1DC',
-            border: '1px solid #EEDCCA',
-            borderRadius: 'var(--radius-full)',
+            background: 'none',
+            border: 'none',
             cursor: 'pointer',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: '0.15rem',
-            padding: '0.4rem 0.75rem',
-            color: currentPage === 'bulk-orders' && !moreMenuOpen ? '#FFFFFF' : '#EA580C',
-            boxShadow: '0 2px 8px rgba(249, 115, 22, 0.2)',
-            transition: 'all 0.15s ease'
+            padding: '0.25rem 0',
+            width: '100%',
+            minWidth: 0,
+            minHeight: '44px',
+            color: currentPage === 'bulk-orders' && !moreMenuOpen ? '#EA580C' : '#806656',
+            transition: 'color 0.15s ease'
           }}
         >
-          <Package size={18} strokeWidth={2.2} />
-          <span style={{ fontSize: '0.66rem', fontWeight: 700, whiteSpace: 'nowrap' }}>
+          <Package size={20} strokeWidth={currentPage === 'bulk-orders' && !moreMenuOpen ? 2.4 : 1.8} />
+          <span style={{ fontSize: '0.67rem', fontWeight: currentPage === 'bulk-orders' && !moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Bulk Order
           </span>
         </button>
@@ -383,15 +395,18 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '0.2rem',
-            padding: '0.35rem',
+            justifyContent: 'center',
+            gap: '0.15rem',
+            padding: '0.25rem 0',
+            width: '100%',
+            minWidth: 0,
+            minHeight: '44px',
             color: moreMenuOpen ? '#EA580C' : '#806656',
-            minWidth: '56px',
             transition: 'color 0.15s ease'
           }}
         >
           <Menu size={20} strokeWidth={moreMenuOpen ? 2.4 : 1.8} />
-          <span style={{ fontSize: '0.68rem', fontWeight: moreMenuOpen ? 700 : 500 }}>
+          <span style={{ fontSize: '0.67rem', fontWeight: moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             More
           </span>
         </button>

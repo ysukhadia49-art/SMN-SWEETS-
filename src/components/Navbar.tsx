@@ -71,11 +71,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           flexWrap: 'wrap'
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-          <Sparkles size={14} color="#F97316" />
-          <span>Tradition in Every Bite • Pure Desi Ghee Sweets & Festive Gift Boxes</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.76rem' }}>
+          <Sparkles size={13} color="#F97316" style={{ flexShrink: 0 }} />
+          <span>Pure Desi Ghee Sweets & Festive Gift Boxes</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.85 }}>
+        <div className="hide-on-mobile" style={{ display: 'flex', alignItems: 'center', gap: '1rem', opacity: 0.85 }}>
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
             <MapPin size={13} color="#F97316" /> Manek Chowk, Ahmedabad
           </span>
@@ -107,64 +107,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Brand Logo & Heritage Title */}
           <button
             onClick={() => handleNavClick('home')}
-            style={{ 
-              background: 'none', 
-              border: 'none', 
-              cursor: 'pointer', 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.85rem',
-              textAlign: 'left',
-              padding: 0
-            }}
+            className="nav-brand-btn"
           >
             {/* Traditional Emblem */}
-            <div 
-              style={{ 
-                width: '46px', 
-                height: '46px', 
-                borderRadius: '50%', 
-                backgroundColor: '#FFF1DC', 
-                border: '2px solid #F97316',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#EA580C',
-                fontWeight: 'bold',
-                fontSize: '1.35rem',
-                fontFamily: 'var(--font-serif)',
-                boxShadow: '0 2px 8px rgba(249, 115, 22, 0.2)'
-              }}
-            >
+            <div className="nav-brand-emblem">
               SMN
             </div>
-            <div>
-              <div 
-                style={{ 
-                  fontFamily: 'var(--font-serif)', 
-                  fontWeight: 800, 
-                  fontSize: '1.25rem', 
-                  color: '#332218',
-                  lineHeight: 1.15,
-                  letterSpacing: '-0.01em'
-                }}
-              >
+            <div className="nav-brand-text">
+              <div className="nav-brand-title">
                 Sukhadiya Manilal Nathalal
               </div>
-              <div 
-                style={{ 
-                  fontSize: '0.72rem', 
-                  fontWeight: 600, 
-                  letterSpacing: '0.08em', 
-                  color: '#EA580C', 
-                  textTransform: 'uppercase',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  marginTop: '0.15rem'
-                }}
-              >
-                <span>Pure Mithai & Gift Hampers</span>
+              <div className="nav-brand-sub">
+                <span>Pure Mithai</span>
                 <span>•</span>
                 <span>Manek Chowk, Ahmedabad</span>
               </div>
@@ -212,11 +166,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Right Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            {/* Track Bulk Enquiry Button */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexShrink: 0 }}>
+            {/* Track Bulk Enquiry Button - Hidden on small mobile header, accessible via menu & bottom bar */}
             <button
               onClick={onOpenTracker}
               title="Track submitted bulk order enquiry"
+              className="hide-on-mobile"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -229,7 +184,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 fontSize: '0.82rem',
                 fontWeight: 600,
                 cursor: 'pointer',
-                transition: 'all 0.15s ease'
+                transition: 'all 0.15s ease',
+                minHeight: '38px'
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = '#F97316';
@@ -241,7 +197,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
             >
               <ClipboardList size={15} color="#EA580C" />
-              <span className="hide-on-mobile">Track Enquiry</span>
+              <span>Track Enquiry</span>
             </button>
 
             {/* Direct WhatsApp Contact */}
@@ -250,10 +206,19 @@ export const Navbar: React.FC<NavbarProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-whatsapp btn-sm"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}
+              style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                justifyContent: 'center',
+                gap: '0.35rem', 
+                textDecoration: 'none',
+                minHeight: '38px',
+                padding: '0.45rem 0.75rem'
+              }}
               title="Enquire directly on shop WhatsApp"
+              aria-label="WhatsApp Contact"
             >
-              <Phone size={14} />
+              <Phone size={15} />
               <span className="hide-on-mobile">WhatsApp</span>
             </a>
 

@@ -61,14 +61,7 @@ export const GiftBoxesPage: React.FC<GiftBoxesPageProps> = ({
 
       <div className="container" style={{ marginTop: '3rem' }}>
         {/* Products Grid */}
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-            gap: '2rem',
-            marginBottom: '4rem'
-          }}
-        >
+        <div className="catalog-grid" style={{ marginBottom: '4rem' }}>
           {giftBoxes.map((product) => (
             <ProductCard
               key={product.id}
