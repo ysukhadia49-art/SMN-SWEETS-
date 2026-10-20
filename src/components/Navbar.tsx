@@ -43,6 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'sweets', label: 'Our Sweets', guLabel: 'મીઠાઈઓ' },
     { id: 'gift-boxes', label: 'Gift Boxes', guLabel: 'ગિફ્ટ બોક્સ' },
     { id: 'bulk-orders', label: 'Bulk Orders', guLabel: 'બલ્ક ઓર્ડર' },
+    { id: 'ratings', label: 'Ratings', guLabel: 'રેટિંગ્સ' },
     { id: 'about', label: 'About Us', guLabel: 'અમારા વિશે' },
     { id: 'contact', label: 'Contact', guLabel: 'સંપર્ક' }
   ];

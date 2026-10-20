@@ -14,6 +14,7 @@ import {
   Flame, 
   HeartHandshake, 
   PackageCheck,
+  Star,
   Gift
 } from 'lucide-react';
 
@@ -528,6 +529,45 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. GOOGLE MAP RATINGS & REVIEWS CALLOUT */}
+      <section style={{ backgroundColor: '#FFFEFA', borderTop: '1px solid #EEDCCA', padding: 'clamp(2.5rem, 4vw, 3.5rem) 1.5rem', textAlign: 'center' }}>
+        <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', color: '#EA580C', fontWeight: 700, fontSize: '0.85rem', marginBottom: '0.65rem', backgroundColor: '#FFF1DC', padding: '0.3rem 0.95rem', borderRadius: 'var(--radius-full)', border: '1px solid #EEDCCA' }}>
+            <Star size={15} fill="#F59E0B" color="#F59E0B" />
+            <span>4.9 ★ Rated on Google Maps • Manek Chowk, Ahmedabad</span>
+          </div>
+          <h2 style={{ fontSize: 'clamp(1.6rem, 3vw, 2.2rem)', color: '#332218', margin: '0.5rem 0 0.75rem 0' }}>
+            Loved by Patrons in Ahmedabad & Across India
+          </h2>
+          <p style={{ color: '#806656', fontSize: '0.98rem', margin: '0 auto 1.75rem', maxWidth: '620px', lineHeight: 1.6 }}>
+            Experience our 7-decade legacy of pure buffalo milk desi ghee sweets. Read verified customer reviews or leave your own rating on Google Maps.
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '0.85rem', flexWrap: 'wrap' }}>
+            <button 
+              onClick={() => {
+                onNavigate('ratings');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }} 
+              className="btn btn-primary btn-lg"
+            >
+              <Star size={17} fill="#F59E0B" color="#F59E0B" />
+              <span>View Reviews & Rate Us</span>
+              <ArrowRight size={16} />
+            </button>
+            <a 
+              href={settings.googleMapsUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="btn btn-secondary btn-lg"
+              style={{ textDecoration: 'none' }}
+            >
+              <ExternalLink size={16} color="#EA580C" />
+              <span>Direct Google Maps Review</span>
+            </a>
           </div>
         </div>
       </section>

@@ -122,6 +122,7 @@ export type CustomerPage =
   | 'sweets'
   | 'gift-boxes'
   | 'bulk-orders'
+  | 'ratings'
   | 'about'
   | 'contact';
 

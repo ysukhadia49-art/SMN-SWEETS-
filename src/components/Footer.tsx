@@ -122,6 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings }) => {
                 { id: 'sweets', label: 'Traditional Sweets & Mithai' },
                 { id: 'gift-boxes', label: 'Festive & Shagun Gift Boxes' },
                 { id: 'bulk-orders', label: 'Bulk Orders & Wedding Enquiries' },
+                { id: 'ratings', label: 'Google Ratings & Reviews (4.9 ★)' },
                 { id: 'about', label: 'Our Story & Heritage' },
                 { id: 'contact', label: 'Visit Our Shop' }
               ].map((item) => (

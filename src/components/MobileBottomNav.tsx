@@ -4,6 +4,7 @@ import {
   Home, 
   Sparkles, 
   Flame, 
+  Star,
   Package, 
   Menu, 
   X, 
@@ -195,8 +196,25 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               </button>
             </div>
 
-            {/* Direct WhatsApp Callout */}
+            {/* Direct WhatsApp & Google Ratings Callout */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+              <button
+                onClick={() => handleItemClick('ratings')}
+                className="btn btn-secondary"
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  backgroundColor: '#FFFEFA',
+                  borderColor: '#EA580C',
+                  color: '#EA580C',
+                  fontWeight: 700,
+                  fontSize: '0.88rem'
+                }}
+              >
+                <Star size={16} fill="#F59E0B" color="#F59E0B" />
+                <span>Google Ratings & Reviews (4.9 ★)</span>
+              </button>
+
               <a
                 href={generateDirectShopWhatsAppUrl(settings.verifiedWhatsAppNumber)}
                 target="_blank"

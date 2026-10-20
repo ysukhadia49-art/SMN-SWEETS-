@@ -16,6 +16,7 @@ import { HomePage } from './pages/customer/HomePage';
 import { OurSweetsPage } from './pages/customer/OurSweetsPage';
 import { GiftBoxesPage } from './pages/customer/GiftBoxesPage';
 import { BulkOrdersPage } from './pages/customer/BulkOrdersPage';
+import { RatingsPage } from './pages/customer/RatingsPage';
 import { AboutUsPage } from './pages/customer/AboutUsPage';
 import { ContactPage } from './pages/customer/ContactPage';
 
@@ -84,6 +85,8 @@ export function App() {
       setCurrentPage('gift-boxes');
     } else if (hash === '#bulk-orders') {
       setCurrentPage('bulk-orders');
+    } else if (hash === '#ratings' || hash === '#reviews') {
+      setCurrentPage('ratings');
     } else if (hash === '#about') {
       setCurrentPage('about');
     } else if (hash === '#contact') {
@@ -245,6 +248,11 @@ export function App() {
                 settings={settings}
                 onOpenTracker={() => setTrackerOpen(true)}
                 currentUser={currentUser}
+              />
+            )}
+            {currentPage === 'ratings' && (
+              <RatingsPage
+                settings={settings}
               />
             )}
             {currentPage === 'about' && (
