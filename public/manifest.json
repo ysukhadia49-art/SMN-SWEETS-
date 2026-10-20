@@ -1,0 +1,22 @@
+{
+  "name": "Sukhadiya Manilal Nathalal - Mithai & Farsan",
+  "short_name": "Sukhadiya Mithai",
+  "description": "Authentic Gujarati traditional sweets, pure desi ghee mithai, farsan, and gift boxes from historic Manek Chowk, Ahmedabad.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFF8ED",
+  "theme_color": "#FFF8ED",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><circle cx='96' cy='96' r='90' fill='%23FFF8ED' stroke='%23F97316' stroke-width='10'/><path d='M96 40 C65 40 52 68 52 88 C52 118 88 145 96 152 C104 145 140 118 140 88 C140 68 127 40 96 40 Z' fill='%23EA580C'/><circle cx='96' cy='88' r='18' fill='%23FFF1DC'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><circle cx='256' cy='256' r='240' fill='%23FFF8ED' stroke='%23F97316' stroke-width='24'/><path d='M256 100 C170 100 140 180 140 230 C140 310 236 380 256 400 C276 380 372 310 372 230 C372 180 342 100 256 100 Z' fill='%23EA580C'/><circle cx='256' cy='230' r='45' fill='%23FFF1DC'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
