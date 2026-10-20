@@ -285,29 +285,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <span style={{ fontWeight: 700, maxWidth: '140px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {currentUser.name}
                 </span>
-                {currentUser.role === 'admin' && onToggleAdmin && (
-                  <button
-                    onClick={onToggleAdmin}
-                    style={{
-                      backgroundColor: '#EA580C',
-                      color: '#FFFFFF',
-                      border: 'none',
-                      padding: '0.2rem 0.6rem',
-                      borderRadius: 'var(--radius-full)',
-                      fontSize: '0.72rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.25rem',
-                      marginLeft: '0.2rem'
-                    }}
-                    title="Open Shop Owner Admin Dashboard"
-                  >
-                    <ShieldCheck size={12} />
-                    <span>Admin</span>
-                  </button>
-                )}
+
                 <button
                   onClick={onLogout}
                   title="Sign Out"
@@ -426,18 +404,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <ClipboardList size={16} /> Track Bulk Order Enquiry
                 </button>
-                {currentUser?.role === 'admin' && onToggleAdmin && (
-                  <button
-                    onClick={() => {
-                      setMobileMenuOpen(false);
-                      onToggleAdmin();
-                    }}
-                    className="btn btn-primary"
-                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.9rem' }}
-                  >
-                    <ShieldCheck size={16} /> Open Shop Admin Dashboard
-                  </button>
-                )}
+
                 {currentUser && (
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', backgroundColor: '#FFF1DC', padding: '0.65rem 0.85rem', borderRadius: 'var(--radius-md)', border: '1px solid #EEDCCA' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.86rem' }}>

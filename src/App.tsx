@@ -74,28 +74,34 @@ export function App() {
       document.body.classList.remove('has-bottom-nav');
     }
 
-    // Check hash on load to support clean routing and redirect legacy loyalty routes
-    const hash = window.location.hash.toLowerCase();
-    if (hash === '#admin') {
-      setIsAdmin(true);
-    } else if (hash === '#sweets' || hash === '#farsan') {
-      setCurrentPage('sweets');
-      if (hash === '#farsan') window.location.hash = 'sweets';
-    } else if (hash === '#gift-boxes') {
-      setCurrentPage('gift-boxes');
-    } else if (hash === '#bulk-orders') {
-      setCurrentPage('bulk-orders');
-    } else if (hash === '#ratings' || hash === '#reviews') {
-      setCurrentPage('ratings');
-    } else if (hash === '#about') {
-      setCurrentPage('about');
-    } else if (hash === '#contact') {
-      setCurrentPage('contact');
-    } else if (hash === '#loyalty' || hash === '#rewards' || hash === '#stamps' || hash === '#card') {
-      // Legacy loyalty route redirection
-      setCurrentPage('sweets');
-      window.location.hash = '';
-    }
+    const processRoute = () => {
+      const hash = window.location.hash.toLowerCase();
+      if (hash === '#admin') {
+        setIsAdmin(true);
+      } else {
+        if (hash === '#sweets' || hash === '#farsan') {
+          setCurrentPage('sweets');
+          if (hash === '#farsan') window.location.hash = 'sweets';
+        } else if (hash === '#gift-boxes') {
+          setCurrentPage('gift-boxes');
+        } else if (hash === '#bulk-orders') {
+          setCurrentPage('bulk-orders');
+        } else if (hash === '#ratings' || hash === '#reviews') {
+          setCurrentPage('ratings');
+        } else if (hash === '#about') {
+          setCurrentPage('about');
+        } else if (hash === '#contact') {
+          setCurrentPage('contact');
+        } else if (hash === '#loyalty' || hash === '#rewards' || hash === '#stamps' || hash === '#card') {
+          setCurrentPage('sweets');
+          window.location.hash = '';
+        }
+      }
+    };
+
+    processRoute();
+    window.addEventListener('hashchange', processRoute);
+    return () => window.removeEventListener('hashchange', processRoute);
   }, [isAdmin, currentUser]);
 
   const handleNavigateCustomer = (page: CustomerPage) => {
