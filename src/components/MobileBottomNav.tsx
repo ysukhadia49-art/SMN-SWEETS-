@@ -127,7 +127,14 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
                   textAlign: 'left'
                 }}
               >
-                <Sparkles size={20} color="#EA580C" />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <Sparkles size={20} color="#EA580C" />
+                  {settings.menuUnderMaintenance && (
+                    <span style={{ fontSize: '0.62rem', backgroundColor: '#FEF3C7', color: '#B45309', padding: '0.1rem 0.35rem', borderRadius: 'var(--radius-full)', border: '1px solid #F59E0B', fontWeight: 700 }}>
+                      Updating
+                    </span>
+                  )}
+                </div>
                 <strong style={{ fontSize: '0.9rem', color: '#332218' }}>Our Sweets</strong>
                 <span style={{ fontSize: '0.75rem', color: '#806656' }}>Pure Desi Ghee</span>
               </button>
@@ -327,7 +334,24 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
             transition: 'color 0.15s ease'
           }}
         >
-          <Sparkles size={20} strokeWidth={currentPage === 'sweets' && !moreMenuOpen ? 2.4 : 1.8} />
+          <div style={{ position: 'relative', display: 'inline-flex' }}>
+            <Sparkles size={20} strokeWidth={currentPage === 'sweets' && !moreMenuOpen ? 2.4 : 1.8} />
+            {settings.menuUnderMaintenance && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-2px',
+                  right: '-4px',
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#F59E0B',
+                  borderRadius: '50%',
+                  border: '1.5px solid #FFFEFA'
+                }}
+                title="Menu Under Maintenance"
+              />
+            )}
+          </div>
           <span style={{ fontSize: '0.67rem', fontWeight: currentPage === 'sweets' && !moreMenuOpen ? 700 : 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
             Sweets
           </span>

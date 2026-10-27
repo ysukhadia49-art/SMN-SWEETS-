@@ -108,7 +108,14 @@ class StoreService {
 
       const storedSettings = localStorage.getItem(STORAGE_KEYS.SETTINGS);
       if (storedSettings) {
-        this.settings = JSON.parse(storedSettings);
+        const parsed = JSON.parse(storedSettings);
+        this.settings = { ...INITIAL_SETTINGS, ...parsed };
+        if (parsed.menuUnderMaintenance === undefined) {
+          this.settings.menuUnderMaintenance = INITIAL_SETTINGS.menuUnderMaintenance;
+        }
+        if (parsed.menuMaintenanceMessage === undefined) {
+          this.settings.menuMaintenanceMessage = INITIAL_SETTINGS.menuMaintenanceMessage;
+        }
       } else {
         this.settings = { ...INITIAL_SETTINGS };
         this.saveSettings();

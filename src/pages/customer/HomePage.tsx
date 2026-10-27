@@ -1,6 +1,7 @@
 import React from 'react';
 import { CustomerPage, Product, ShopSettings } from '../../types';
 import { ProductCard } from '../../components/ProductCard';
+import { MenuMaintenanceBanner } from '../../components/MenuMaintenanceBanner';
 import { generateDirectShopWhatsAppUrl } from '../../utils/whatsapp';
 import { 
   Sparkles, 
@@ -128,8 +129,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <button
                   onClick={() => onNavigate('sweets')}
                   className="btn btn-primary btn-lg"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem' }}
                 >
-                  Explore Our Sweets <ArrowRight size={18} />
+                  <span>Explore Our Sweets</span>
+                  {settings.menuUnderMaintenance && (
+                    <span style={{ fontSize: '0.68rem', backgroundColor: '#FEF3C7', color: '#B45309', padding: '0.12rem 0.45rem', borderRadius: 'var(--radius-full)', border: '1px solid #F59E0B', fontWeight: 700 }}>
+                      Updating
+                    </span>
+                  )}
+                  <ArrowRight size={18} />
                 </button>
                 <button
                   onClick={() => onNavigate('bulk-orders')}
@@ -224,6 +232,14 @@ export const HomePage: React.FC<HomePageProps> = ({
       {/* 2. FEATURED SWEETS SECTION */}
       <section className="section-padding">
         <div className="container">
+          {/* Menu Maintenance Banner if enabled */}
+          {settings.menuUnderMaintenance && (
+            <MenuMaintenanceBanner 
+              settings={settings} 
+              onNavigateBulk={() => onNavigate('bulk-orders')} 
+            />
+          )}
+
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: '2.5rem', gap: '1rem' }}>
             <div>
               <span className="badge badge-orange" style={{ marginBottom: '0.5rem' }}>
@@ -251,6 +267,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 product={product}
                 onSelect={onSelectProduct}
                 verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
+                isUnderMaintenance={settings.menuUnderMaintenance}
               />
             ))}
           </div>

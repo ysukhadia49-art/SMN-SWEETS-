@@ -1,6 +1,7 @@
 import React from 'react';
 import { CustomerPage, Product, ShopSettings } from '../../types';
 import { ProductCard } from '../../components/ProductCard';
+import { MenuMaintenanceBanner } from '../../components/MenuMaintenanceBanner';
 import { Gift, Sparkles, CheckCircle2, ArrowRight, Phone } from 'lucide-react';
 import { generateDirectShopWhatsAppUrl } from '../../utils/whatsapp';
 
@@ -60,6 +61,9 @@ export const GiftBoxesPage: React.FC<GiftBoxesPageProps> = ({
       </section>
 
       <div className="container" style={{ marginTop: '3rem' }}>
+        {/* Menu Maintenance Notice */}
+        <MenuMaintenanceBanner settings={settings} onNavigateBulk={() => onNavigate('bulk-orders')} />
+
         {/* Products Grid */}
         <div className="catalog-grid" style={{ marginBottom: '4rem' }}>
           {giftBoxes.map((product) => (
@@ -68,6 +72,7 @@ export const GiftBoxesPage: React.FC<GiftBoxesPageProps> = ({
               product={product}
               onSelect={onSelectProduct}
               verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
+              isUnderMaintenance={settings.menuUnderMaintenance}
             />
           ))}
         </div>

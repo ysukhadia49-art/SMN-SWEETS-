@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product, ShopSettings } from '../../types';
 import { ProductCard } from '../../components/ProductCard';
+import { MenuMaintenanceBanner } from '../../components/MenuMaintenanceBanner';
 import { Sparkles, Clock, ShieldCheck, Flame, Search, X } from 'lucide-react';
 
 interface FarsanPageProps {
@@ -91,6 +92,9 @@ export const FarsanPage: React.FC<FarsanPageProps> = ({
 
       {/* Main Content */}
       <div className="container" style={{ marginTop: '2.5rem' }}>
+        {/* Menu Maintenance Notice */}
+        <MenuMaintenanceBanner settings={settings} />
+
         {/* Search Bar */}
         <div 
           style={{ 
@@ -149,6 +153,7 @@ export const FarsanPage: React.FC<FarsanPageProps> = ({
               product={product}
               onSelect={onSelectProduct}
               verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
+              isUnderMaintenance={settings.menuUnderMaintenance}
             />
           ))}
         </div>

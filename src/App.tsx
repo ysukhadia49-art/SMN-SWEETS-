@@ -309,6 +309,7 @@ export function App() {
             onClose={() => setSelectedProduct(null)}
             verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
             onBulkEnquire={handleBulkEnquireFromProduct}
+            isUnderMaintenance={settings.menuUnderMaintenance}
           />
 
           {/* Enquiry Status Tracker Modal */}

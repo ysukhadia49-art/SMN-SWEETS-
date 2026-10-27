@@ -17,7 +17,9 @@ export const OFFICIAL_SHOP_SETTINGS: ShopSettings = {
   establishedYear: '1849/2022',
   purityGuarantee: 'ચોખ્ખા ઘી ની મીઠાઈઓ અને કાજુની આઈટમ હોલસેલ ભાવે મળશે • 100% Pure Ghee & Wholesale Cashew Sweets',
   language: 'en',
-  websiteUrl: 'https://smn-sweets.vercel.app/'
+  websiteUrl: 'https://smn-sweets.vercel.app/',
+  menuUnderMaintenance: true,
+  menuMaintenanceMessage: 'Our online menu and pricing are temporarily under maintenance while we update our fresh daily batch selections. Our Manek Chowk store is open, and direct orders via WhatsApp and Phone are actively accepted!'
 };
 
 export const MENU_CATEGORIES: Category[] = [

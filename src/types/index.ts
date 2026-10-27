@@ -103,6 +103,8 @@ export interface ShopSettings {
   purityGuarantee: string;
   language: 'en' | 'gu';
   websiteUrl?: string;
+  menuUnderMaintenance?: boolean;
+  menuMaintenanceMessage?: string;
 }
 
 export interface AnalyticsSummary {

@@ -7,12 +7,14 @@ interface ProductCardProps {
   product: Product;
   onSelect: (product: Product) => void;
   verifiedWhatsAppNumber: string;
+  isUnderMaintenance?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onSelect,
-  verifiedWhatsAppNumber
+  verifiedWhatsAppNumber,
+  isUnderMaintenance
 }) => {
   const [selectedPackIndex, setSelectedPackIndex] = useState<number>(0);
   const selectedPack = product.packageSizes[selectedPackIndex];
@@ -99,6 +101,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <Clock size={11} /> Seasonal Special
             </span>
           )}
+          {isUnderMaintenance && (
+            <span 
+              className="badge badge-amber"
+              style={{ backdropFilter: 'blur(4px)', backgroundColor: 'rgba(254, 243, 199, 0.95)', border: '1px solid #F59E0B', color: '#92400E' }}
+            >
+              Rate Updating
+            </span>
+          )}
         </div>
 
         {/* Pure Desi Ghee Pill */}
@@ -168,10 +178,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Price Row */}
           <div className="product-card-price-row">
             <span className="product-card-price-label">
-              {product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pure Mithai'}
+              {isUnderMaintenance ? 'Rate Card' : (product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pure Mithai')}
             </span>
-            <div className="product-card-price-val">
-              {formatINR(displayPrice)}
+            <div 
+              className="product-card-price-val"
+              style={isUnderMaintenance ? { fontSize: '0.88rem', color: '#B45309', fontWeight: 700 } : undefined}
+            >
+              {isUnderMaintenance ? 'Rates Updating' : formatINR(displayPrice)}
             </div>
           </div>
 
@@ -193,7 +206,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               title="Enquire on WhatsApp"
             >
               <Phone size={15} />
-              <span>Enquire</span>
+              <span>{isUnderMaintenance ? 'Check Rate' : 'Enquire'}</span>
             </a>
           </div>
         </div>

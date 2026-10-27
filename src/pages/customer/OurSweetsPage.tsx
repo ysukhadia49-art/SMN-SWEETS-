@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Product, Category, ShopSettings } from '../../types';
 import { ProductCard } from '../../components/ProductCard';
+import { MenuMaintenanceBanner } from '../../components/MenuMaintenanceBanner';
 import { Search, Sparkles, Filter, X } from 'lucide-react';
 
 interface OurSweetsPageProps {
@@ -91,6 +92,9 @@ export const OurSweetsPage: React.FC<OurSweetsPageProps> = ({
 
       {/* Filter and Search Bar */}
       <div className="container" style={{ marginTop: '2.5rem' }}>
+        {/* Menu Maintenance Banner */}
+        <MenuMaintenanceBanner settings={settings} />
+
         <div 
           style={{ 
             backgroundColor: '#FFFEFA', 
@@ -214,6 +218,7 @@ export const OurSweetsPage: React.FC<OurSweetsPageProps> = ({
                 product={product}
                 onSelect={onSelectProduct}
                 verifiedWhatsAppNumber={settings.verifiedWhatsAppNumber}
+                isUnderMaintenance={settings.menuUnderMaintenance}
               />
             ))}
           </div>

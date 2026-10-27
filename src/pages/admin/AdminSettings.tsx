@@ -113,6 +113,72 @@ export const AdminSettings: React.FC<AdminSettingsProps> = ({ settings, onRefres
         }}
       >
         <form onSubmit={handleSave}>
+          {/* Menu Maintenance Mode Toggle */}
+          <div 
+            style={{ 
+              backgroundColor: formData.menuUnderMaintenance ? '#FEF3C7' : '#FFF8ED', 
+              border: formData.menuUnderMaintenance ? '1.5px solid #F59E0B' : '1px solid #EEDCCA', 
+              borderRadius: 'var(--radius-lg)', 
+              padding: '1.25rem',
+              marginBottom: '1.5rem',
+              transition: 'all 0.2s ease'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem', flexWrap: 'wrap' }}>
+              <div>
+                <label 
+                  htmlFor="menuMaintenanceToggle" 
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: '0.5rem', 
+                    fontSize: '1rem', 
+                    fontWeight: 700, 
+                    color: formData.menuUnderMaintenance ? '#92400E' : '#332218',
+                    cursor: 'pointer' 
+                  }}
+                >
+                  <AlertTriangle size={18} color={formData.menuUnderMaintenance ? '#D97706' : '#EA580C'} />
+                  <span>Menu Under Maintenance Mode</span>
+                  {formData.menuUnderMaintenance && (
+                    <span className="badge badge-amber" style={{ fontSize: '0.72rem' }}>
+                      ACTIVE
+                    </span>
+                  )}
+                </label>
+                <p style={{ fontSize: '0.84rem', color: '#806656', margin: '0.35rem 0 0' }}>
+                  When enabled, visitors will see maintenance notifications across the sweets menu and catalog, directing them to WhatsApp/call for live daily availability.
+                </p>
+              </div>
+
+              <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontWeight: 600, fontSize: '0.9rem', color: '#332218' }}>
+                <input
+                  id="menuMaintenanceToggle"
+                  type="checkbox"
+                  checked={!!formData.menuUnderMaintenance}
+                  onChange={(e) => setFormData({ ...formData, menuUnderMaintenance: e.target.checked })}
+                  style={{ width: '20px', height: '20px', accentColor: '#EA580C', cursor: 'pointer' }}
+                />
+                <span>{formData.menuUnderMaintenance ? 'Enabled' : 'Disabled'}</span>
+              </label>
+            </div>
+
+            {formData.menuUnderMaintenance && (
+              <div style={{ marginTop: '1rem', borderTop: '1px solid #FDE68A', paddingTop: '0.85rem' }}>
+                <label className="form-label" style={{ fontSize: '0.85rem', color: '#92400E' }}>
+                  Maintenance Notice Message (Shown to Customers)
+                </label>
+                <textarea
+                  rows={3}
+                  value={formData.menuMaintenanceMessage || ''}
+                  onChange={(e) => setFormData({ ...formData, menuMaintenanceMessage: e.target.value })}
+                  className="form-input"
+                  style={{ fontSize: '0.88rem', backgroundColor: '#FFFEFA' }}
+                  placeholder="Our online menu and pricing are temporarily under maintenance while we update our fresh daily batch selections. Our Manek Chowk store is open, and direct orders via WhatsApp and Phone are actively accepted!"
+                />
+              </div>
+            )}
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
             <div className="form-group">
               <label className="form-label">Business Name *</label>

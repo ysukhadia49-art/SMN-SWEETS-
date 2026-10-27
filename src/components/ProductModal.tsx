@@ -18,13 +18,15 @@ interface ProductModalProps {
   onClose: () => void;
   verifiedWhatsAppNumber: string;
   onBulkEnquire: (productName: string) => void;
+  isUnderMaintenance?: boolean;
 }
 
 export const ProductModal: React.FC<ProductModalProps> = ({
   product,
   onClose,
   verifiedWhatsAppNumber,
-  onBulkEnquire
+  onBulkEnquire,
+  isUnderMaintenance
 }) => {
   if (!product) return null;
 
@@ -156,6 +158,23 @@ export const ProductModal: React.FC<ProductModalProps> = ({
             <p style={{ fontSize: '0.95rem', color: '#806656', lineHeight: 1.6, marginBottom: '1.25rem' }}>
               {product.description}
             </p>
+
+            {isUnderMaintenance && (
+              <div 
+                style={{ 
+                  backgroundColor: '#FEF3C7', 
+                  border: '1px solid #F59E0B', 
+                  borderRadius: 'var(--radius-md)', 
+                  padding: '0.75rem 1rem', 
+                  marginBottom: '1.25rem',
+                  fontSize: '0.85rem',
+                  color: '#92400E',
+                  lineHeight: 1.5
+                }}
+              >
+                ⚠️ <strong>Menu Under Maintenance:</strong> Live rates and batch portions are being updated. Tap below to chat on WhatsApp and confirm today's fresh availability & exact rate.
+              </div>
+            )}
 
             {/* Packaging options */}
             {product.packageSizes && product.packageSizes.length > 0 && (

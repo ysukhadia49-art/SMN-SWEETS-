@@ -85,6 +85,27 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
+      {/* Menu Maintenance Announcement Bar */}
+      {settings.menuUnderMaintenance && (
+        <div 
+          style={{ 
+            backgroundColor: '#FEF3C7', 
+            borderBottom: '1px solid #FDE68A', 
+            color: '#92400E', 
+            fontSize: '0.8rem', 
+            padding: '0.4rem 1rem', 
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            fontWeight: 600
+          }}
+        >
+          <span>⚠️ <strong>Menu Notice:</strong> Our online sweet menu is temporarily under maintenance. Live WhatsApp ordering & counter takeaway remain open!</span>
+        </div>
+      )}
+
       {/* Main Navigation Bar */}
       <nav 
         style={{ 
@@ -150,7 +171,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                     borderRadius: 'var(--radius-full)',
                     cursor: 'pointer',
                     transition: 'all 0.15s ease',
-                    position: 'relative'
+                    position: 'relative',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.35rem'
                   }}
                   onMouseEnter={(e) => {
                     if (!active) e.currentTarget.style.color = '#F97316';
@@ -159,7 +183,22 @@ export const Navbar: React.FC<NavbarProps> = ({
                     if (!active) e.currentTarget.style.color = '#332218';
                   }}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
+                  {item.id === 'sweets' && settings.menuUnderMaintenance && (
+                    <span 
+                      style={{ 
+                        fontSize: '0.62rem', 
+                        backgroundColor: '#FEF3C7', 
+                        color: '#B45309', 
+                        padding: '0.12rem 0.4rem', 
+                        borderRadius: 'var(--radius-full)', 
+                        border: '1px solid #F59E0B', 
+                        fontWeight: 700 
+                      }}
+                    >
+                      Updating
+                    </span>
+                  )}
                 </button>
               );
             })}
@@ -352,7 +391,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                       textAlign: 'left'
                     }}
                   >
-                    <span>{item.label}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      {item.label}
+                      {item.id === 'sweets' && settings.menuUnderMaintenance && (
+                        <span style={{ fontSize: '0.65rem', backgroundColor: '#FEF3C7', color: '#B45309', padding: '0.1rem 0.35rem', borderRadius: 'var(--radius-full)', border: '1px solid #F59E0B', fontWeight: 700 }}>
+                          Updating
+                        </span>
+                      )}
+                    </span>
                     <span style={{ fontSize: '0.85rem', color: '#806656' }}>{item.guLabel}</span>
                   </button>
                 );
