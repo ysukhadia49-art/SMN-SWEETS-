@@ -8,8 +8,7 @@ import {
   MapPin, 
   ArrowRight, 
   AlertCircle,
-  Mail,
-  Info
+  Mail
 } from 'lucide-react';
 
 declare global {
@@ -427,28 +426,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess }
               )}
             </button>
           </form>
-
-          {/* Quick Notice for OAuth setup */}
-          <div 
-            style={{
-              marginTop: '1.25rem',
-              padding: '0.65rem 0.85rem',
-              backgroundColor: '#FFF8ED',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid #FDE68A',
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '0.5rem',
-              fontSize: '0.75rem',
-              color: '#806656',
-              lineHeight: 1.4
-            }}
-          >
-            <Info size={14} color="#D97706" style={{ flexShrink: 0, marginTop: '2px' }} />
-            <div>
-              <strong>Secure Google Sign-In:</strong> Connected to Google OAuth Client (<code style={{ fontSize: '0.72rem', backgroundColor: '#FEF3C7', padding: '1px 3px', borderRadius: '3px' }}>neural-ripple-492807-u2</code>).
-            </div>
-          </div>
 
           {/* Purity Guarantee Footer */}
           <div 
