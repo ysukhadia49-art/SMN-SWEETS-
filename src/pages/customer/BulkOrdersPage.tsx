@@ -43,12 +43,12 @@ export const BulkOrdersPage: React.FC<BulkOrdersPageProps> = ({
   const [errorMsg, setErrorMsg] = useState('');
 
   const popularItems = [
-    'Special Kaju Katli',
-    'Traditional Mohanthal',
-    'Shahi Motichoor Laddoo',
-    'Mathura Kesar Peda',
+    'Kaju Katri',
+    'Kesar Mohanthal',
+    'Moti Chur Laddu',
+    'Kesar Peda',
     'Bhavnagari Gathiya',
-    'Traditional Fafda',
+    'Traditional Ahmedabad Fafda',
     'Royal Heritage Gift Box',
     'Shagun Wedding Mithai Box'
   ];

@@ -254,21 +254,21 @@ describe('Sukhadiya Manilal Nathalal Platform Test Suite', () => {
     it('verifies exact rate-card prices for key Gujarati sweets', () => {
       const products = store.getProducts();
 
-      // Badam Katri (1160/-)
+      // Badam Katri (1380/-)
       const badamKatli = products.find(p => p.nameGu === 'બદામ કતરી');
-      expect(badamKatli?.priceAmount).toBe(1160);
+      expect(badamKatli?.priceAmount).toBe(1380);
 
-      // Kesar Mohanthal (700/-)
+      // Kesar Mohanthal (840/-)
       const mohanthal = products.find(p => p.nameGu === 'કેસર મોહનથાળ');
-      expect(mohanthal?.priceAmount).toBe(700);
+      expect(mohanthal?.priceAmount).toBe(840);
 
-      // Safed Katri (960/-)
-      const kajuKatli = products.find(p => p.nameGu === 'સફેદ કતરી');
-      expect(kajuKatli?.priceAmount).toBe(960);
+      // Kaju Katri (1180/-)
+      const kajuKatli = products.find(p => p.nameGu === 'કાજુ કતરી');
+      expect(kajuKatli?.priceAmount).toBe(1180);
 
-      // Motichoor Laddu (580/-)
-      const motichoor = products.find(p => p.nameGu === 'મોતીચુર લાડું');
-      expect(motichoor?.priceAmount).toBe(580);
+      // Moti Chur Laddu (780/-)
+      const motichoor = products.find(p => p.nameGu === 'મોતીચૂર લાડુ');
+      expect(motichoor?.priceAmount).toBe(780);
 
       // Rasgulla (130/-)
       const rasgulla = products.find(p => p.nameGu === 'રસગુલ્લા');
@@ -279,10 +279,10 @@ describe('Sukhadiya Manilal Nathalal Platform Test Suite', () => {
       expect(rasMalai?.priceAmount).toBe(32);
       expect(rasMalai?.priceUnit).toBe('per piece');
 
-      // Price on enquiry items (Kesar Ghari, Ghebar)
+      // Price verified item from updated menu (Kesar Ghari - 860/-)
       const kesarGhari = products.find(p => p.nameGu === 'કેસર ઘારી');
-      expect(kesarGhari?.priceAmount).toBeNull();
-      expect(kesarGhari?.priceVerified).toBe(false);
+      expect(kesarGhari?.priceAmount).toBe(860);
+      expect(kesarGhari?.priceVerified).toBe(true);
 
       const motaGhebar = products.find(p => p.nameGu === 'મોટા ઘેબર');
       expect(motaGhebar?.priceAmount).toBeNull();

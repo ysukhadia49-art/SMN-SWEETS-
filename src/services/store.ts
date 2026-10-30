@@ -13,10 +13,10 @@ import {
 } from '../data/menuData';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'smn_products_v5',
-  CATEGORIES: 'smn_categories_v5',
+  PRODUCTS: 'smn_products_v7',
+  CATEGORIES: 'smn_categories_v7',
   ENQUIRIES: 'smn_bulk_enquiries_v6',
-  SETTINGS: 'smn_shop_settings_v5',
+  SETTINGS: 'smn_shop_settings_v7',
   LEGACY_CLEANUP_DONE: 'smn_legacy_loyalty_purged'
 };
 
@@ -73,7 +73,7 @@ class StoreService {
       const storedProds = localStorage.getItem(STORAGE_KEYS.PRODUCTS);
       if (storedProds) {
         const parsed = JSON.parse(storedProds);
-        if (Array.isArray(parsed) && parsed.length >= 70) {
+        if (Array.isArray(parsed) && parsed.length >= 40) {
           this.products = parsed;
         } else {
           this.products = [...INITIAL_PRODUCTS];
@@ -87,7 +87,7 @@ class StoreService {
       const storedCats = localStorage.getItem(STORAGE_KEYS.CATEGORIES);
       if (storedCats) {
         const parsedCats = JSON.parse(storedCats);
-        if (Array.isArray(parsedCats) && parsedCats.length >= 10) {
+        if (Array.isArray(parsedCats) && parsedCats.length >= 8) {
           this.categories = parsedCats;
         } else {
           this.categories = [...INITIAL_CATEGORIES];
