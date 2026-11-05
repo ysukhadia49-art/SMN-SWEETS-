@@ -41,25 +41,17 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, settings }) => {
         >
           {/* Brand & Heritage Col */}
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-              <div 
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem' }}>
+              <img 
+                src="/images/logo.png" 
+                alt="Sukhadiya Manilal Nathalal - SMN Sweets Logo" 
                 style={{ 
-                  width: '42px', 
-                  height: '42px', 
-                  borderRadius: '50%', 
-                  backgroundColor: '#FFFEFA', 
-                  border: '2px solid #F97316',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#EA580C',
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem',
-                  fontFamily: 'var(--font-serif)'
-                }}
-              >
-                SMN
-              </div>
+                  height: '52px', 
+                  width: 'auto', 
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 2px 6px rgba(51, 34, 24, 0.12))'
+                }} 
+              />
               <div>
                 <h3 style={{ fontSize: '1.2rem', margin: 0, color: '#332218' }}>
                   Sukhadiya Manilal Nathalal

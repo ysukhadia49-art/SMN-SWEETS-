@@ -169,6 +169,12 @@ export const BulkOrdersPage: React.FC<BulkOrdersPageProps> = ({
               textAlign: 'center'
             }}
           >
+            <img 
+              src="/images/logo.png" 
+              alt="SMN Sweets Logo" 
+              style={{ height: '52px', width: 'auto', objectFit: 'contain', margin: '0 auto 1.25rem', display: 'block' }} 
+            />
+
             <div 
               style={{ 
                 width: '72px', 

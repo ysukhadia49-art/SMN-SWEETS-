@@ -193,26 +193,17 @@ export const LoginPage: React.FC<LoginPageProps> = ({ settings, onLoginSuccess }
       >
         {/* Brand Emblem & Header */}
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div 
+          <img 
+            src="/images/logo.png" 
+            alt="Sukhadiya Manilal Nathalal - SMN Sweets Logo" 
             style={{ 
-              width: '68px', 
-              height: '68px', 
-              borderRadius: '50%', 
-              backgroundColor: '#FFFEFA', 
-              border: '3px solid #EA580C',
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#EA580C',
-              fontWeight: 800,
-              fontSize: '1.75rem',
-              fontFamily: 'var(--font-serif)',
-              boxShadow: '0 8px 24px rgba(234, 88, 12, 0.2)',
-              marginBottom: '0.85rem'
-            }}
-          >
-            SMN
-          </div>
+              height: '84px', 
+              width: 'auto', 
+              objectFit: 'contain', 
+              marginBottom: '0.85rem',
+              filter: 'drop-shadow(0 6px 18px rgba(120, 20, 20, 0.16))'
+            }} 
+          />
 
           <h1 
             style={{ 

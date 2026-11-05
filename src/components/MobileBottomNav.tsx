@@ -83,13 +83,20 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
           >
             {/* Header in sheet */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', borderBottom: '1px solid #F5EAE0', paddingBottom: '0.75rem' }}>
-              <div>
-                <span style={{ fontSize: '0.75rem', color: '#EA580C', fontWeight: 700, textTransform: 'uppercase' }}>
-                  Explore More
-                </span>
-                <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#332218' }}>
-                  Sukhadiya Manilal Nathalal
-                </h3>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <img 
+                  src="/images/logo.png" 
+                  alt="SMN Sweets Logo" 
+                  style={{ height: '36px', width: 'auto', objectFit: 'contain' }} 
+                />
+                <div>
+                  <span style={{ fontSize: '0.75rem', color: '#EA580C', fontWeight: 700, textTransform: 'uppercase' }}>
+                    Explore More
+                  </span>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', color: '#332218' }}>
+                    Sukhadiya Manilal Nathalal
+                  </h3>
+                </div>
               </div>
               <button
                 onClick={() => setMoreMenuOpen(false)}

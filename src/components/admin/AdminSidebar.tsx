@@ -87,6 +87,11 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           >
             <Menu size={20} />
           </button>
+          <img 
+            src="/images/logo.png" 
+            alt="SMN Logo" 
+            style={{ height: '34px', width: 'auto', objectFit: 'contain' }} 
+          />
           <div>
             <div style={{ fontSize: '0.88rem', fontWeight: 700, color: '#FFF8ED', lineHeight: 1.2 }}>
               Sukhadiya Admin
@@ -154,23 +159,15 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-            <div 
+            <img 
+              src="/images/logo.png" 
+              alt="Sukhadiya Manilal Nathalal - SMN Sweets" 
               style={{ 
-                width: '38px', 
-                height: '38px', 
-                borderRadius: '50%', 
-                backgroundColor: '#EA580C', 
-                color: '#FFFFFF',
-                display: 'flex', 
-                alignItems: 'center', 
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: '1rem',
-                fontFamily: 'var(--font-serif)'
-              }}
-            >
-              SMN
-            </div>
+                height: '42px', 
+                width: 'auto', 
+                objectFit: 'contain' 
+              }} 
+            />
             <div>
               <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#FFF8ED', lineHeight: 1.2 }}>
                 Sukhadiya Manilal

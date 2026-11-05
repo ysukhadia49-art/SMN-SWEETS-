@@ -29,7 +29,19 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate, settings }
           textAlign: 'center'
         }}
       >
-        <div className="container" style={{ maxWidth: '800px' }}>
+        <div className="container" style={{ maxWidth: '800px', textAlign: 'center' }}>
+          <img 
+            src="/images/logo.png" 
+            alt="Sukhadiya Manilal Nathalal Logo" 
+            style={{ 
+              height: '76px', 
+              width: 'auto', 
+              objectFit: 'contain', 
+              margin: '0 auto 1.25rem', 
+              display: 'block', 
+              filter: 'drop-shadow(0 4px 12px rgba(51, 34, 24, 0.1))' 
+            }} 
+          />
           <div 
             style={{ 
               display: 'inline-flex', 

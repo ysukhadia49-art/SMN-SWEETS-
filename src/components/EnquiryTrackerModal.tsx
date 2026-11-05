@@ -110,6 +110,11 @@ export const EnquiryTrackerModal: React.FC<EnquiryTrackerModalProps> = ({
         </button>
 
         <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+          <img 
+            src="/images/logo.png" 
+            alt="SMN Sweets Logo" 
+            style={{ height: '46px', width: 'auto', objectFit: 'contain', margin: '0 auto 0.75rem', display: 'block' }} 
+          />
           <h2 style={{ fontSize: '1.6rem', color: '#332218', marginBottom: '0.35rem' }}>
             Track Bulk Order Enquiry
           </h2>

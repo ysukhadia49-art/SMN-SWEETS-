@@ -130,10 +130,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             onClick={() => handleNavClick('home')}
             className="nav-brand-btn"
           >
-            {/* Traditional Emblem */}
-            <div className="nav-brand-emblem">
-              SMN
-            </div>
+            {/* Authentic Brand Logo */}
+            <img 
+              src="/images/logo.png" 
+              alt="Sukhadiya Manilal Nathalal - SMN Sweets Logo" 
+              className="nav-brand-logo-img"
+            />
             <div className="nav-brand-text">
               <div className="nav-brand-title">
                 Sukhadiya Manilal Nathalal

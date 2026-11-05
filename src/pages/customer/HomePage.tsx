@@ -78,23 +78,29 @@ export const HomePage: React.FC<HomePageProps> = ({
           >
             {/* Left Content */}
             <div style={{ textAlign: 'left' }}>
-              {/* Heritage Tag */}
-              <div 
-                style={{ 
-                  display: 'inline-flex', 
-                  alignItems: 'center', 
-                  gap: '0.45rem', 
-                  backgroundColor: '#FFFEFA', 
-                  border: '1px solid #EEDCCA', 
-                  padding: '0.35rem 0.9rem', 
-                  borderRadius: 'var(--radius-full)',
-                  marginBottom: '1.25rem'
-                }}
-              >
-                <Sparkles size={14} color="#EA580C" />
-                <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#EA580C', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
-                  Historic Manek Chowk • Estd. 1948
-                </span>
+              {/* Brand Logo & Heritage Tag */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.25rem', flexWrap: 'wrap' }}>
+                <img 
+                  src="/images/logo.png" 
+                  alt="SMN Sweets Logo" 
+                  style={{ height: '56px', width: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 2px 8px rgba(51, 34, 24, 0.12))' }} 
+                />
+                <div 
+                  style={{ 
+                    display: 'inline-flex', 
+                    alignItems: 'center', 
+                    gap: '0.45rem', 
+                    backgroundColor: '#FFFEFA', 
+                    border: '1px solid #EEDCCA', 
+                    padding: '0.35rem 0.9rem', 
+                    borderRadius: 'var(--radius-full)'
+                  }}
+                >
+                  <Sparkles size={14} color="#EA580C" />
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#EA580C', letterSpacing: '0.06em', textTransform: 'uppercase' }}>
+                    Historic Manek Chowk • Estd. 1948
+                  </span>
+                </div>
               </div>
 
               {/* Exact Hero Heading */}
