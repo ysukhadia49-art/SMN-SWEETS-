@@ -178,11 +178,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Price Row */}
           <div className="product-card-price-row">
             <span className="product-card-price-label">
-              {isUnderMaintenance ? 'Rate Card' : (product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pure Mithai')}
+              {isUnderMaintenance ? 'Rate Card' : (product.priceAmount ? (selectedPack ? selectedPack.label : product.priceUnit) : 'Pricing')}
             </span>
             <div 
               className="product-card-price-val"
-              style={isUnderMaintenance ? { fontSize: '0.88rem', color: '#B45309', fontWeight: 700 } : undefined}
+              style={isUnderMaintenance ? { fontSize: '0.88rem', color: '#B45309', fontWeight: 700 } : (!product.priceAmount ? { fontSize: '0.9rem', color: '#806656', fontWeight: 600 } : undefined)}
             >
               {isUnderMaintenance ? 'Rates Updating' : formatINR(displayPrice)}
             </div>

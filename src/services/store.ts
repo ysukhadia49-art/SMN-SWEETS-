@@ -13,10 +13,10 @@ import {
 } from '../data/menuData';
 
 const STORAGE_KEYS = {
-  PRODUCTS: 'smn_products_v7',
-  CATEGORIES: 'smn_categories_v7',
+  PRODUCTS: 'smn_products_v8',
+  CATEGORIES: 'smn_categories_v8',
   ENQUIRIES: 'smn_bulk_enquiries_v6',
-  SETTINGS: 'smn_shop_settings_v7',
+  SETTINGS: 'smn_shop_settings_v8',
   LEGACY_CLEANUP_DONE: 'smn_legacy_loyalty_purged'
 };
 

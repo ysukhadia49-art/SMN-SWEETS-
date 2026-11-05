@@ -251,42 +251,39 @@ describe('Sukhadiya Manilal Nathalal Platform Test Suite', () => {
       });
     });
 
-    it('verifies exact rate-card prices for key Gujarati sweets', () => {
+    it('verifies all catalog items have prices removed and configure as price on enquiry', () => {
       const products = store.getProducts();
 
-      // Badam Katri (1380/-)
+      // All products should have priceAmount null and priceVerified false
+      products.forEach(p => {
+        expect(p.priceAmount).toBeNull();
+        expect(p.priceVerified).toBe(false);
+      });
+
+      // Sample key Gujarati sweets
       const badamKatli = products.find(p => p.nameGu === 'બદામ કતરી');
-      expect(badamKatli?.priceAmount).toBe(1380);
+      expect(badamKatli).toBeDefined();
+      expect(badamKatli?.priceAmount).toBeNull();
 
-      // Kesar Mohanthal (840/-)
       const mohanthal = products.find(p => p.nameGu === 'કેસર મોહનથાળ');
-      expect(mohanthal?.priceAmount).toBe(840);
+      expect(mohanthal).toBeDefined();
+      expect(mohanthal?.priceAmount).toBeNull();
 
-      // Kaju Katri (1180/-)
       const kajuKatli = products.find(p => p.nameGu === 'કાજુ કતરી');
-      expect(kajuKatli?.priceAmount).toBe(1180);
+      expect(kajuKatli).toBeDefined();
+      expect(kajuKatli?.priceAmount).toBeNull();
 
-      // Moti Chur Laddu (780/-)
       const motichoor = products.find(p => p.nameGu === 'મોતીચૂર લાડુ');
-      expect(motichoor?.priceAmount).toBe(780);
+      expect(motichoor).toBeDefined();
+      expect(motichoor?.priceAmount).toBeNull();
 
-      // Rasgulla (130/-)
-      const rasgulla = products.find(p => p.nameGu === 'રસગુલ્લા');
-      expect(rasgulla?.priceAmount).toBe(130);
-
-      // Ras Malai 100g (32/- per piece)
-      const rasMalai = products.find(p => p.nameGu === 'રસ મલાઈ ૧૦૦ ગ્રામ');
-      expect(rasMalai?.priceAmount).toBe(32);
-      expect(rasMalai?.priceUnit).toBe('per piece');
-
-      // Price verified item from updated menu (Kesar Ghari - 860/-)
       const kesarGhari = products.find(p => p.nameGu === 'કેસર ઘારી');
-      expect(kesarGhari?.priceAmount).toBe(860);
-      expect(kesarGhari?.priceVerified).toBe(true);
+      expect(kesarGhari).toBeDefined();
+      expect(kesarGhari?.priceAmount).toBeNull();
 
       const motaGhebar = products.find(p => p.nameGu === 'મોટા ઘેબર');
+      expect(motaGhebar).toBeDefined();
       expect(motaGhebar?.priceAmount).toBeNull();
-      expect(motaGhebar?.priceVerified).toBe(false);
     });
 
     it('verifies all rate card sections have active categories with Gujarati titles', () => {
